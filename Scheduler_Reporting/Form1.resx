@@ -1,0 +1,273 @@
+﻿<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="notifyIcon1.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABIXAAASFwAAAAAAAAAA
+        AACQQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/jj8O/40/Dv+PQRD/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kkYX/692VP+zfl7/n1wz/45AEP+PQhH/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/49CEv+RRRb/uopt//Dm4P/28O3/07Wi/6ZoQv+UShz/j0EQ/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMS/4w9C/+QRBT+v5J2/vbv6/7/////1bmn/6Fh
+        OP+NPQz/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEIS/45AEP+dWS7/4Mu9////
+        ///t4dn/qGxG/45AD/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/49BEf+RRBX/sHpY/9/J
+        u/////////////Ts5/+fXDL/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/j0IS/5dQI//BlXn/9vDs////
+        ////////////////////////8Obf/5hRJf+PQRD/kEMT/5BDE/+QQxP/j0IR/610Uf/s4Nf/////////
+        ///t4dn/4s/C/+HMv//l08j/9e7q///////n183+mVMn/40+Df+QQxP/kEMT/694Vf/8+vj//vz8/8+t
+        mf+sc0//oF00/5hQJP+XTyL/mlQo/6RlPv/AlHj/+PPw/unZzv+bVir/kEMT/5dPI//27+v/2L2s/ppU
+        KP+SRhf/kEIS/5BDE/+QQxP/kEMT/5BDE/+QQhL/kUQV/5VNIP/FnoT/4cy//6NjO/+4h2j/uYhq/ow9
+        C/+QQhL/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/jT4N/40+Df+WTSD+k0ga/4w8
+        Cv+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/j0IS/5BC
+        Ev+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAA==
+</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="txtNome.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="txtNome.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI Semibold, 12pt, style=Bold</value>
+  </data>
+  <data name="txtNome.Location" type="System.Drawing.Point, System.Drawing">
+    <value>112, 9</value>
+  </data>
+  <data name="txtNome.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 21</value>
+  </data>
+  <data name="txtNome.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="txtNome.Text" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="&gt;&gt;txtNome.Name" xml:space="preserve">
+    <value>txtNome</value>
+  </data>
+  <data name="&gt;&gt;txtNome.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtNome.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txtNome.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tBoxNome.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 33</value>
+  </data>
+  <data name="tBoxNome.Size" type="System.Drawing.Size, System.Drawing">
+    <value>260, 23</value>
+  </data>
+  <data name="tBoxNome.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tBoxNome.Name" xml:space="preserve">
+    <value>tBoxNome</value>
+  </data>
+  <data name="&gt;&gt;tBoxNome.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tBoxNome.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tBoxNome.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnCodiceAccesso.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="btnCodiceAccesso.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 12pt, style=Bold</value>
+  </data>
+  <data name="btnCodiceAccesso.Location" type="System.Drawing.Point, System.Drawing">
+    <value>101, 142</value>
+  </data>
+  <data name="btnCodiceAccesso.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 30</value>
+  </data>
+  <data name="btnCodiceAccesso.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnCodiceAccesso.Text" xml:space="preserve">
+    <value>INIZIA</value>
+  </data>
+  <data name="&gt;&gt;btnCodiceAccesso.Name" xml:space="preserve">
+    <value>btnCodiceAccesso</value>
+  </data>
+  <data name="&gt;&gt;btnCodiceAccesso.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCodiceAccesso.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCodiceAccesso.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tBoxPassword.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 83</value>
+  </data>
+  <data name="tBoxPassword.Size" type="System.Drawing.Size, System.Drawing">
+    <value>260, 23</value>
+  </data>
+  <data name="tBoxPassword.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tBoxPassword.Name" xml:space="preserve">
+    <value>tBoxPassword</value>
+  </data>
+  <data name="&gt;&gt;tBoxPassword.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tBoxPassword.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tBoxPassword.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="txtPassword.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="txtPassword.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI Semibold, 12pt, style=Bold</value>
+  </data>
+  <data name="txtPassword.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="txtPassword.Location" type="System.Drawing.Point, System.Drawing">
+    <value>101, 59</value>
+  </data>
+  <data name="txtPassword.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 21</value>
+  </data>
+  <data name="txtPassword.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="txtPassword.Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="&gt;&gt;txtPassword.Name" xml:space="preserve">
+    <value>txtPassword</value>
+  </data>
+  <data name="&gt;&gt;txtPassword.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtPassword.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txtPassword.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>284, 184</value>
+  </data>
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABIXAAASFwAAAAAAAAAA
+        AACQQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/jj8O/40/Dv+PQRD/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kkYX/692VP+zfl7/n1wz/45AEP+PQhH/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/49CEv+RRRb/uopt//Dm4P/28O3/07Wi/6ZoQv+UShz/j0EQ/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMS/4w9C/+QRBT+v5J2/vbv6/7/////1bmn/6Fh
+        OP+NPQz/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEIS/45AEP+dWS7/4Mu9////
+        ///t4dn/qGxG/45AD/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/49BEf+RRBX/sHpY/9/J
+        u/////////////Ts5/+fXDL/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/j0IS/5dQI//BlXn/9vDs////
+        ////////////////////////8Obf/5hRJf+PQRD/kEMT/5BDE/+QQxP/j0IR/610Uf/s4Nf/////////
+        ///t4dn/4s/C/+HMv//l08j/9e7q///////n183+mVMn/40+Df+QQxP/kEMT/694Vf/8+vj//vz8/8+t
+        mf+sc0//oF00/5hQJP+XTyL/mlQo/6RlPv/AlHj/+PPw/unZzv+bVir/kEMT/5dPI//27+v/2L2s/ppU
+        KP+SRhf/kEIS/5BDE/+QQxP/kEMT/5BDE/+QQhL/kUQV/5VNIP/FnoT/4cy//6NjO/+4h2j/uYhq/ow9
+        C/+QQhL/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/jT4N/40+Df+WTSD+k0ga/4w8
+        Cv+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/j0IS/5BC
+        Ev+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BDE/+QQxP/kEMT/5BD
+        E/+QQxP/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAA==
+</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Scheduler - Reporting</value>
+  </data>
+  <data name="&gt;&gt;notifyIcon1.Name" xml:space="preserve">
+    <value>notifyIcon1</value>
+  </data>
+  <data name="&gt;&gt;notifyIcon1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>FormAccesso</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>
