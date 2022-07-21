@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scheduler_Reporting.Models
 {
+    /// <summary>
+    /// forse non serve
+    /// </summary>
     public class payment
     {
         public ulong id { get; set; }

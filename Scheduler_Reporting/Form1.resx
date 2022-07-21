@@ -86,56 +86,56 @@
 </value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txtNome.AutoSize" type="System.Boolean, mscorlib">
+  <data name="txtCodice.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="txtNome.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="txtCodice.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 12pt, style=Bold</value>
   </data>
-  <data name="txtNome.Location" type="System.Drawing.Point, System.Drawing">
-    <value>112, 9</value>
+  <data name="txtCodice.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 9</value>
   </data>
-  <data name="txtNome.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 21</value>
+  <data name="txtCodice.Size" type="System.Drawing.Size, System.Drawing">
+    <value>139, 21</value>
   </data>
-  <data name="txtNome.TabIndex" type="System.Int32, mscorlib">
+  <data name="txtCodice.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="txtNome.Text" xml:space="preserve">
-    <value>Nome</value>
+  <data name="txtCodice.Text" xml:space="preserve">
+    <value>CODICE ACCESSO</value>
   </data>
-  <data name="&gt;&gt;txtNome.Name" xml:space="preserve">
-    <value>txtNome</value>
+  <data name="&gt;&gt;txtCodice.Name" xml:space="preserve">
+    <value>txtCodice</value>
   </data>
-  <data name="&gt;&gt;txtNome.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtCodice.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtNome.Parent" xml:space="preserve">
+  <data name="&gt;&gt;txtCodice.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;txtNome.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="&gt;&gt;txtCodice.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
-  <data name="tBoxNome.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tBoxCodice.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 33</value>
   </data>
-  <data name="tBoxNome.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tBoxCodice.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 23</value>
   </data>
-  <data name="tBoxNome.TabIndex" type="System.Int32, mscorlib">
+  <data name="tBoxCodice.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;tBoxNome.Name" xml:space="preserve">
-    <value>tBoxNome</value>
+  <data name="&gt;&gt;tBoxCodice.Name" xml:space="preserve">
+    <value>tBoxCodice</value>
   </data>
-  <data name="&gt;&gt;tBoxNome.Type" xml:space="preserve">
+  <data name="&gt;&gt;tBoxCodice.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tBoxNome.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tBoxCodice.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;tBoxNome.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="&gt;&gt;tBoxCodice.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="btnCodiceAccesso.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
@@ -145,7 +145,7 @@
     <value>Segoe UI, 12pt, style=Bold</value>
   </data>
   <data name="btnCodiceAccesso.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 142</value>
+    <value>268, 107</value>
   </data>
   <data name="btnCodiceAccesso.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 30</value>
@@ -166,67 +166,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnCodiceAccesso.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tBoxPassword.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 83</value>
-  </data>
-  <data name="tBoxPassword.Size" type="System.Drawing.Size, System.Drawing">
-    <value>260, 23</value>
-  </data>
-  <data name="tBoxPassword.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tBoxPassword.Name" xml:space="preserve">
-    <value>tBoxPassword</value>
-  </data>
-  <data name="&gt;&gt;tBoxPassword.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tBoxPassword.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tBoxPassword.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="txtPassword.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="txtPassword.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI Semibold, 12pt, style=Bold</value>
-  </data>
-  <data name="txtPassword.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="txtPassword.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 59</value>
-  </data>
-  <data name="txtPassword.Size" type="System.Drawing.Size, System.Drawing">
-    <value>79, 21</value>
-  </data>
-  <data name="txtPassword.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="txtPassword.Text" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="&gt;&gt;txtPassword.Name" xml:space="preserve">
-    <value>txtPassword</value>
-  </data>
-  <data name="&gt;&gt;txtPassword.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtPassword.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtPassword.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>284, 184</value>
+    <value>361, 149</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

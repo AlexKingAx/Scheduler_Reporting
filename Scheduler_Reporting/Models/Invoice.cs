@@ -44,6 +44,12 @@ namespace Scheduler_Reporting.Models
         public uint? creator_id { get; set; }
         public uint? structure_id { get; set; }
 
+        /// <summary>
+        /// metodo per la generazione del file json da inviare
+        /// </summary>
+        public void GenerateJSON()
+        {
 
+        }
     }
 }

@@ -31,55 +31,43 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAccesso));
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.txtNome = new System.Windows.Forms.Label();
-            this.tBoxNome = new System.Windows.Forms.TextBox();
+            this.txtCodice = new System.Windows.Forms.Label();
+            this.tBoxCodice = new System.Windows.Forms.TextBox();
             this.btnCodiceAccesso = new System.Windows.Forms.Button();
-            this.tBoxPassword = new System.Windows.Forms.TextBox();
-            this.txtPassword = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // notifyIcon1
             // 
             resources.ApplyResources(this.notifyIcon1, "notifyIcon1");
             // 
-            // txtNome
+            // txtCodice
             // 
-            resources.ApplyResources(this.txtNome, "txtNome");
-            this.txtNome.Name = "txtNome";
+            resources.ApplyResources(this.txtCodice, "txtCodice");
+            this.txtCodice.Name = "txtCodice";
             // 
-            // tBoxNome
+            // tBoxCodice
             // 
-            resources.ApplyResources(this.tBoxNome, "tBoxNome");
-            this.tBoxNome.Name = "tBoxNome";
+            resources.ApplyResources(this.tBoxCodice, "tBoxCodice");
+            this.tBoxCodice.Name = "tBoxCodice";
             // 
             // btnCodiceAccesso
             // 
+            this.btnCodiceAccesso.BackColor = System.Drawing.SystemColors.ButtonFace;
             resources.ApplyResources(this.btnCodiceAccesso, "btnCodiceAccesso");
             this.btnCodiceAccesso.Name = "btnCodiceAccesso";
-            this.btnCodiceAccesso.UseVisualStyleBackColor = true;
+            this.btnCodiceAccesso.UseVisualStyleBackColor = false;
             this.btnCodiceAccesso.Click += new System.EventHandler(this.btnCodiceAccesso_Click);
-            // 
-            // tBoxPassword
-            // 
-            resources.ApplyResources(this.tBoxPassword, "tBoxPassword");
-            this.tBoxPassword.Name = "tBoxPassword";
-            // 
-            // txtPassword
-            // 
-            resources.ApplyResources(this.txtPassword, "txtPassword");
-            this.txtPassword.Name = "txtPassword";
             // 
             // FormAccesso
             // 
             this.BackColor = System.Drawing.Color.White;
             resources.ApplyResources(this, "$this");
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.tBoxPassword);
             this.Controls.Add(this.btnCodiceAccesso);
-            this.Controls.Add(this.tBoxNome);
-            this.Controls.Add(this.txtNome);
+            this.Controls.Add(this.tBoxCodice);
+            this.Controls.Add(this.txtCodice);
             this.MaximizeBox = false;
             this.Name = "FormAccesso";
+            this.Load += new System.EventHandler(this.FormAccesso_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -88,10 +76,8 @@
         #endregion
 
         private NotifyIcon notifyIcon1;
-        private Label txtNome;
-        private TextBox tBoxNome;
+        private Label txtCodice;
+        private TextBox tBoxCodice;
         private Button btnCodiceAccesso;
-        private TextBox tBoxPassword;
-        private Label txtPassword;
     }
 }
