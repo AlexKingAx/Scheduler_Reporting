@@ -11,7 +11,7 @@ namespace Scheduler_Reporting.Models
         public string address_street_1 { get; set; }
         public string? address_street_2 { get; set; } = "";
         public string? city { get; set; } = "";
-        public int? country_id { get; set; } = "";
+        public int? country_id { get; set; } = null;
         public string? fiscalcode { get; set; } = "";
         public string? state { get; set; } = "";
 

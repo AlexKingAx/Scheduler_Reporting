@@ -96,7 +96,7 @@
     <value>12, 9</value>
   </data>
   <data name="txtCodice.Size" type="System.Drawing.Size, System.Drawing">
-    <value>139, 21</value>
+    <value>206, 32</value>
   </data>
   <data name="txtCodice.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -117,10 +117,10 @@
     <value>2</value>
   </data>
   <data name="tBoxCodice.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 33</value>
+    <value>12, 53</value>
   </data>
   <data name="tBoxCodice.Size" type="System.Drawing.Size, System.Drawing">
-    <value>260, 23</value>
+    <value>260, 31</value>
   </data>
   <data name="tBoxCodice.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -145,7 +145,7 @@
     <value>Segoe UI, 12pt, style=Bold</value>
   </data>
   <data name="btnCodiceAccesso.Location" type="System.Drawing.Point, System.Drawing">
-    <value>268, 107</value>
+    <value>300, 142</value>
   </data>
   <data name="btnCodiceAccesso.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 30</value>
@@ -172,7 +172,7 @@
     <value>True</value>
   </metadata>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>361, 149</value>
+    <value>393, 184</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

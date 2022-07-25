@@ -15,14 +15,15 @@ namespace Scheduler_Reporting.Models
         public DateTime registration_date { get; set; }
         public string invoice_number { get; set; }
         public string document_type { get; set; }
-        public string descrizione { get; set; } = "";
+        public string description { get; set; } = "";
         public string notes { get; set; } = "";
+        public int ritenuta { get; set; }
         public string? status { get; set; } = null;
         public List<Item> Items { get; set; } = new List<Item>();
-        public string name { get; set; }
+        public string? name { get; set; } = "";
         public string? phone { get; set; } = "";
         public string? website { get; set; } = "";
-        public string email { get; set; }        
+        public string? email { get; set; } = null;  
         public List<Address> Addresses { get; set; } = new List<Address>();
 
 

@@ -9,6 +9,7 @@ using System.Text.Json.Nodes;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using Scheduler_Reporting.Models;
+using System.Linq;
 
 namespace Scheduler_Reporting
 {
@@ -24,7 +25,7 @@ namespace Scheduler_Reporting
         public List<Data> listFromDrVeto = new List<Data>();
 
         // LISTA DI OGGETTI FATTURE CHE ARRIVANO DA DRV
-        public List<Data> dataForReporting = new List<Data>();
+        public List<Data> listForReporting = new List<Data>();
 
         string test = String.Format("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
 
@@ -55,6 +56,7 @@ namespace Scheduler_Reporting
             bool? success = null;
             /// PRENDO VALORE DALLA TXTBOX C
             token = tBoxCodice.Text;
+            token = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
             if (token == null || token == "")
             {
                 //MOSTRA MSG "manca token"
@@ -97,65 +99,335 @@ namespace Scheduler_Reporting
         /// <summary>
         /// ESEGUE METODO DI PER LA SINCRONIZZAZIONE DEI DATI
         /// </summary>
-        private void OnSyncClicked(object? sender, EventArgs e)
+        private async void OnSyncClicked(object? sender, EventArgs e)
         {
             SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
             connDrVeto.Open();
-            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLdes as 'Descrizione Riga' ,ACfam as 'Famiglia dr.veto', FLqte as 'QTA', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email Cliente', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Uid as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P.iVA', CLdept as 'PROVINCIA','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid where FCtyp = 'Facture'";
+            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLpxu as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email Cliente', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Uid as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'PROVINCIA','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid where FCtyp = 'Facture'";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
             SqlDataReader reader = sqlcmd.ExecuteReader();
+            uint i = 0;
             while (reader.Read())
             {
+
                 var statusVar = reader.GetBoolean("Status"); // PRENDO IL VALORE CHE CE ALL'INTERNO DELLA RESPONDE DI STATUS
 
                 string? statusString = null; // CREO VARIABILE CHE MI SERVE PER PASSARE LO STATO DI PAGAMENTO NEL MODO CORRETTO  
 
                 if (statusVar) statusString = "COMPLETED"; // ASSEGNO IL VALORE COMPLETED SE NELLA RESPONSE TROVO TRUE O 1
 
-                listFromDrVeto.Add(new Data()
+                // TOLGO LA VIRGOLA ALLA RITENUTA, SICCOME LO VUOLE COME INTERO
+                var ritenutaVar = reader.GetDecimal("Ritenuta Acconto");
+                ritenutaVar = ritenutaVar * 100;
+
+                // CLASSE PRINCIPALE PER RACCOLTA DATI
+                var data = new Data();
+                try
+                {
+                    data.invoice_date = reader.GetDateTime("Data Fattura");
+                }
+                catch (Exception er)
                 {
 
-                });
+                }
+                try
+                {
+                    data.registration_date = reader.GetDateTime("Data Aggiornamento");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.invoice_number = reader.GetString("Numero Fattura");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.document_type = reader.GetString("Tipologia Documento");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.description = reader.GetString("Descrizione");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.ritenuta = (int)ritenutaVar;
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.status = statusString;
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.name = reader.GetString("Nome Cliente");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.phone = reader.GetString("Telefono");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    data.email = reader.GetString("Email Cliente");
+                }
+                catch (Exception er)
+                {
+
+                }
+
+                i++;// PER INCREMENTO AUTOMATICO.
+                    // P.S DA VEDERE COME SETTARE IL NOME ITEM
+
+                // TOLGO LA VIRGOLA AL PREZZO, SICCOME LO VUOLE COME INTERO
+                var priceVar = reader.GetDecimal("Price");
+                priceVar = priceVar * 100;
 
 
-                //CREO OGGETTO INVOICE NELLA LISTA DELLE FATTURE
-                //invoicesDataFromDrV.Add(new Invoice()
-                //{
-                //    invoice_date = reader.GetDateTime("Data Fattura"),
-                //    registratio_date = reader.GetDateTime("Data Aggiornamento"),
-                //    invoice_number = reader.GetString("Numero Fattura"),
-                //    document_type = reader.GetString("Tipologia Documento"),
-                //    description = reader.GetString("Descrizione"),
-                //    notes = null,
-                //    ritenuta = (ulong)reader.GetInt64("Ritenuta Acconto"),
-                //    status = statusString
-                //});
 
-                ////CREO OGGETTO INVOICEITEMS NELLA LISTA DELLE RIGHE FATTURA
-                //invoiceItemsDataFromDrV.Add(new InvoicesItem()
-                //{
-                //    name = reader.GetString("Nome Cliente"),
-                //    description = reader.GetString("Descrizione Riga"),
-                //    quantity = reader.GetInt32(""),
+                // PRENDO RIGA FATTURA
+                var item = new Item()
+                {
+                    name = "Riga " + i
+                    //fctax
+                    //indtax
+                    //valid
+                };
+                try
+                {
+                    item.description = reader.GetString("Descrizione Riga");
+                }
+                catch (Exception er)
+                {
 
-                //});
+                }
+                try
+                {
+                    item.family = reader.GetString("Famiglia drv");
+                }
+                catch (Exception er)
+                {
 
-                ////CREO OGGETTO USER NELLA LISTA DELLE RIGHE FATTURA
-                //usersDataFromDrV.Add(new User()
-                //{
-                //    name = reader.GetString("Nome Cliente"),  
-                //    phone = reader.GetString("Telefono"),
-                //    email = reader.GetString("Email Cliente"),
-                //    role = "customer",
-                //    contact_name = reader.GetString("Nome Cliente") + reader.GetString("Cognome"),
+                }
+                try
+                {
+                    item.quantity = (int)reader.GetDecimal("QTA");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    item.price = (int)priceVar;
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    item.totalTax = (int)reader.GetDecimal("Tot IVA");
+                }
+                catch (Exception er)
+                {
+
+                }
+
+                //PRENDO LE PERCENTUALI IVA DOVE NON SONO NULL
+                try
+                {
+                    var tax = new Tax() { percent = (int)reader.GetDecimal("Perc IVA 1") };
+                    item.taxes.Add(tax);
+
+                }
+                catch (Exception er)
+                {
+
+                }
+
+                try
+                {
+                    var tax = new Tax() { percent = (int)reader.GetDecimal("Perc IVA 2") };
+                    item.taxes.Add(tax);
+                }
+                catch (Exception er)
+                {
+
+                }
+
+                try
+                {
+                    var tax = new Tax() { percent = (int)reader.GetDecimal("Perc IVA 3") };
+                    item.taxes.Add(tax);
+                }
+                catch (Exception er)
+                {
+
+                }
+
+                //AGGIUNGO RIGA ALLA FATTURA
+                data.Items.Add(item);
+
+                //PRENDO GLI INDIRIZZI E I DATI DEL CLIENTE
+                var address = new Address();
+                try
+                {
+                    address.address_street_1 = reader.GetString("Indirizzo");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    address.address_street_2 = reader.GetString("Indirizzo 2");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    address.city = reader.GetString("Citta");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    address.fiscalcode = reader.GetString("CF Cliente");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    address.state = reader.GetString("PROVINCIA");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    address.vatnumber = reader.GetString("P iva");
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
+                    address.zip = reader.GetString("CAP");
+                }
+                catch (Exception er)
+                {
+
+                }
+
+
+                //AGGIUNGO DATI CLIENTE IN GENERAL DATA
+                data.Addresses.Add(address);
+
+                // AGGIUNGO RIGA DELLA QUERIY SCOMPOSTA NEI VARI DATI ALLA LISTA DATI FROM DRVETO
+                listFromDrVeto.Add(data);
+
+            }
+
+
+
+
+
+            foreach (var obj in listFromDrVeto)
+            {
+
+
+                // SE NON MI TROVA UN ELEMENTO NELLA LISTA CON IL NUMERO FATTURA UGUALE A QUELLO
+                // DELL ALTRA LISTA ALLORA LO AGGIUNGE PER IL TRASFERIMENTO
+                if (!listForReporting.Any(n => n.invoice_number == obj.invoice_number))
+                {
+                    listForReporting.Add(obj);
+                    MessageBox.Show(obj.ToString());
+                }
+                else
+                {
+                    var element = listForReporting.FirstOrDefault(x => x.invoice_number == obj.invoice_number); 
+
+                    if (element != null)
+                    {                        
+                        listForReporting.Remove(element); // LO RIMUOVO
+
+                        // PASSO LE RIGHE FATTURE NEL CASO CI SIA UN DOPPIONE ALL'INTERNO
+                        // DELLA LISTA FROM DR VETO. 
+                        // DOPO DI CHE LO AGGIUNGO ALL'ELEMNTO CHE SARA MESSO NELLA LISTA FOR REPORTING. 
+                        element.Items.AddRange(obj.Items);
+
+                        listForReporting.Add(element);// LO REINSERISCO AGGIORNATO
+                        MessageBox.Show(element.ToString());
+                    }
                     
+                }
 
-                //});
-
-                MessageBox.Show(reader.GetDateTime("Data Fattura").ToString());
             }
             sqlcmd.Dispose();
             connDrVeto.Dispose();
+        }
+
+        private async Task<bool> AlredyExistInReporting()
+        {
+            bool AlreadyExist;
+            string sdk = "0000001";
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+                client.DefaultRequestHeaders.ConnectionClose = true;
+
+                var response = await client.GetAsync("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/active?customer_id=&status=&from_date=&to_date=&invoice_number=&description=&orderByField=&orderBy=&page=1");
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                MessageBox.Show(responseBody);
+
+                AlreadyExist = true;
+
+            }
+
+            return AlreadyExist;
         }
 
 
@@ -269,9 +541,6 @@ namespace Scheduler_Reporting
             return false;
         }
 
-        private void FormAccesso_Load(object sender, EventArgs e)
-        {
 
-        }
     }
 }

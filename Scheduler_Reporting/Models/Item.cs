@@ -15,13 +15,9 @@ namespace Scheduler_Reporting.Models
         /// <summary>
         /// PREZZO SENZA VIRGOLA
         /// </summary>
-        public int prezzo 
-        {
-            get { return prezzo * 100; } // MOLTIPLICA AUTOMATICAMENTE QUANDO IO INSERISCO I DATI PER 100 TOGLIENDO LA VIRGOLA AL PREZZO
-            set { prezzo = value; } 
-        }
+        public int price { get; set; }
         public int totalTax { get; set; }
-        public List<Tax> taxes { get; set; }
+        public List<Tax> taxes { get; set; } = new List<Tax>();
         public bool fctax { get; set; } = false;
         public bool indtax { get; set; } = false;
         public bool? valid { get; set; } = true;
