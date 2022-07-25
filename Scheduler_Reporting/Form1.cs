@@ -33,7 +33,6 @@ namespace Scheduler_Reporting
         public FormAccesso()
         {
             InitializeComponent();
-
         }
 
 
@@ -69,7 +68,18 @@ namespace Scheduler_Reporting
                 return;
             }
 
-            success = await Connection_Test();
+            try { success = await Connection_Test(); }
+            catch (HttpRequestException err)
+            {
+                //MOSTRA MSG "manca token"
+                MessageBox.Show(
+                    "Assenza internet o problema di rete, l'errore " +
+                    "si genera quando si prova a fare la connessione a reporting",
+                    "Errore di collegamento",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
+            }
 
             ///SE TUTTO E CORRETTO ALLORA METTO L'APP NEL SYSTEM TRAY
             if (success == true)
@@ -99,14 +109,36 @@ namespace Scheduler_Reporting
         /// <summary>
         /// ESEGUE METODO DI PER LA SINCRONIZZAZIONE DEI DATI
         /// </summary>
-        private async void OnSyncClicked(object? sender, EventArgs e)
+        private void OnSyncClicked(object? sender, EventArgs e)
         {
+            //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
             SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
             connDrVeto.Open();
             query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLpxu as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email Cliente', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Uid as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'PROVINCIA','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid where FCtyp = 'Facture'";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
             SqlDataReader reader = sqlcmd.ExecuteReader();
-            uint i = 0;
+
+            DataPicker(reader); // PRENDO E INSERISCO I DATI NELLA LISTA 1
+
+            DatesTransformation(); // MODIFICO E INSERISCO I DATI NELLA LISTA 2 PER INVIO
+
+            string json = JsonConvert.SerializeObject(listForReporting);
+
+            MessageBox.Show(json);
+
+            //CHIUSO LE CONNESSIONI
+            sqlcmd.Dispose();
+            connDrVeto.Dispose();
+        }
+
+        /// <summary>
+        /// METODO CHE PRENDE I DATI DALLA QUERY E LI INSERISCE NELLA LISTA FROM DRVETO
+        /// </summary>
+        /// <param name="reader">DATI PRESI DALLA QUERY</param>
+        private void DataPicker(SqlDataReader reader)
+        {
+            var i = 0; // VAR CHE SERVE PER INCREMENTO LOCALE 
+
             while (reader.Read())
             {
 
@@ -363,11 +395,10 @@ namespace Scheduler_Reporting
                 listFromDrVeto.Add(data);
 
             }
+        }
 
-
-
-
-
+        private void DatesTransformation()
+        {
             foreach (var obj in listFromDrVeto)
             {
 
@@ -377,14 +408,14 @@ namespace Scheduler_Reporting
                 if (!listForReporting.Any(n => n.invoice_number == obj.invoice_number))
                 {
                     listForReporting.Add(obj);
-                    MessageBox.Show(obj.ToString());
+                    //MessageBox.Show(obj.ToString());
                 }
                 else
                 {
-                    var element = listForReporting.FirstOrDefault(x => x.invoice_number == obj.invoice_number); 
+                    var element = listForReporting.FirstOrDefault(x => x.invoice_number == obj.invoice_number);
 
                     if (element != null)
-                    {                        
+                    {
                         listForReporting.Remove(element); // LO RIMUOVO
 
                         // PASSO LE RIGHE FATTURE NEL CASO CI SIA UN DOPPIONE ALL'INTERNO
@@ -392,42 +423,10 @@ namespace Scheduler_Reporting
                         // DOPO DI CHE LO AGGIUNGO ALL'ELEMNTO CHE SARA MESSO NELLA LISTA FOR REPORTING. 
                         element.Items.AddRange(obj.Items);
 
-                        listForReporting.Add(element);// LO REINSERISCO AGGIORNATO
-                        MessageBox.Show(element.ToString());
+                        listForReporting.Add(element);// LO REINSERISCO AGGIORNATO                   
                     }
-                    
                 }
-
             }
-            sqlcmd.Dispose();
-            connDrVeto.Dispose();
-        }
-
-        private async Task<bool> AlredyExistInReporting()
-        {
-            bool AlreadyExist;
-            string sdk = "0000001";
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Accept
-                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
-
-                client.DefaultRequestHeaders.ConnectionClose = true;
-
-                var response = await client.GetAsync("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/active?customer_id=&status=&from_date=&to_date=&invoice_number=&description=&orderByField=&orderBy=&page=1");
-
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                MessageBox.Show(responseBody);
-
-                AlreadyExist = true;
-
-            }
-
-            return AlreadyExist;
         }
 
 
@@ -527,9 +526,9 @@ namespace Scheduler_Reporting
                 //var content = new FormUrlEncodedContent(values);
                 //HttpResponseMessage response = new HttpResponseMessage();
                 //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                var response2 = await client.GetAsync("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
+                var response = await client.GetAsync("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
                 //response.EnsureSuccessStatusCode();
-                string responseBody = await response2.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync();
                 //MessageBox.Show(responseBody);
                 int stringErr = responseBody.IndexOf("Unauthenticated");
                 if ((responseBody != "" || responseBody != null) && stringErr == -1)

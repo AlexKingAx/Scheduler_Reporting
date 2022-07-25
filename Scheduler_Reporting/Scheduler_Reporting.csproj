@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.2.0" />
     <PackageReference Include="MySql.Data" Version="8.0.29" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
