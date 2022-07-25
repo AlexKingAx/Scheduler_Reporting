@@ -15,11 +15,13 @@ namespace Scheduler_Reporting
 {
     public partial class FormAccesso : Form
     {
-        public string token;
+        public string? local_token;
         private const string token_prova = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
         private const string connStringReporting = "Data Source=80.88.87.40; Database=w133edy7_reporting; User Id=w133edy7_rootreporting; Password=password;";
         private const string connStringDrVeto = "Data Source=(localDb)\\MSSQLLocalDB; Initial Catalog=DrVeto; Trusted_Connection=True";
         private string? query;
+        private string? userJson;        
+        private bool success = false;// VAR PER SYSTEM TRAY (SE AVVIENE CON SUCCESSO TUTTO ALLORA TRUE)
 
         // LISTA DI OGGETTI FATTURE CHE ARRIVANO DA DRV
         public List<Data> listFromDrVeto = new List<Data>();
@@ -30,7 +32,7 @@ namespace Scheduler_Reporting
 
         public FormAccesso()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
 
@@ -47,25 +49,46 @@ namespace Scheduler_Reporting
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private async void btnCodiceAccesso_Click(object sender, EventArgs e)
-        {
+        {            
 
-            ///VAR PER SYSTEM TRAY (SE AVVIENE CON SUCCESSO TUTTO ALLORA TRUE)
-            bool? success = null;
-            /// PRENDO VALORE DALLA TXTBOX C
-            token = tBoxCodice.Text;
-            token = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
-            if (token == null || token == "")
+            //token = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
+            if (local_token == null || local_token == "" && !success)
             {
-                //MOSTRA MSG "manca token"
-                MessageBox.Show(
-                    "Manca Il codice di accesso(token)",
-                    "Errore di collegamento",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                    );
-                return;
+                /// PRENDO VALORE DALLA TXTBOX
+                local_token = tBoxCodice.Text;
+
+                /// MESSAGGIO DI ERRORE
+                if (local_token == null || local_token == "")
+                {
+                    //MOSTRA MSG "manca token"
+                    MessageBox.Show(
+                        "Manca Il codice di accesso(token)",
+                        "Errore di collegamento",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                        );
+                    success = false;
+                    return;
+                }
+                success = true;
             }
 
+            success = await ConnectionTester(success);// TESTO LE CONN
+
+            LoginDataStoring(success);// CREO FILE JSON PER LA PRIMA VOLTA CON I DATI LOGIN
+
+            ///SE TUTTO E CORRETTO ALLORA METTO L'APP NEL SYSTEM TRAY
+            SystemTryAppTrasformation(success);
+
+        }
+
+        /// <summary>
+        /// TESO LE CONNESSIONI A ENTRAMBI I DB 
+        /// </summary>
+        /// <param name="success"></param>
+        /// <returns></returns>
+        private async Task<bool> ConnectionTester(bool success)
+        {
             try { success = await Connection_Test(); }
             catch (HttpRequestException err)
             {
@@ -77,9 +100,40 @@ namespace Scheduler_Reporting
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                     );
+                success = false;
             }
 
-            ///SE TUTTO E CORRETTO ALLORA METTO L'APP NEL SYSTEM TRAY
+            return success;
+        }
+
+        /// <summary>
+        /// METODO CHE MI MEMORIZZA IL TOKEN E IL DATI DELLO USER LOCAL IN UN FILE COSI DA NON DOVERLI PIU PRENDERE
+        /// </summary>
+        /// <param name="success"></param>
+        private void LoginDataStoring(bool success)
+        {
+            /// SALVO I DATI DI ACCESSO IN UN FILE JSON CRIPTANDOLI IN MODO DA RENDERLI SICURI,
+            /// PER RENDERLI DISPONIBILI AL PROSSIMO RIAVVIO
+            if (success == true)
+            {
+                var user = new Login() { token = local_token };
+                userJson = JsonConvert.SerializeObject(user);
+                File.WriteAllText(@"user.json", userJson);
+
+                //PRENDO I DATI DAL FILE JSON
+                userJson = string.Empty;
+                userJson = File.ReadAllText(@"user.json");
+                Login resultUser = JsonConvert.DeserializeObject<Login>(userJson);
+            }
+        }
+
+        /// <summary>
+        /// METODO CHE TRASFORMA IL FORM IN UN APPLICAZIONE 
+        /// CHE GIRA SOLO NEL SYSTETRY, IN BASSO A DESTRA
+        /// </summary>
+        /// <param name="success"></param>
+        private void SystemTryAppTrasformation(bool success)
+        {
             if (success == true)
             {
                 this.ShowInTaskbar = false;
@@ -95,7 +149,6 @@ namespace Scheduler_Reporting
                 notifyIcon1.ContextMenuStrip.Items.Add("Termina applicazione", Image.FromFile("icons/close.ico"), OnCloseClicked);
 
             }
-
         }
 
         //CHIUSURA
@@ -185,7 +238,7 @@ namespace Scheduler_Reporting
                     .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
+                    new AuthenticationHeaderValue("Bearer", local_token);
 
                     client.DefaultRequestHeaders.ConnectionClose = true;
 
@@ -624,7 +677,7 @@ namespace Scheduler_Reporting
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+                new AuthenticationHeaderValue("Bearer", local_token);
 
                 client.DefaultRequestHeaders.ConnectionClose = true;
 
@@ -645,6 +698,31 @@ namespace Scheduler_Reporting
             return false;
         }
 
+        /// <summary>
+        /// METODO CHE VIENE ESEGUITO DURANTE IL CARICAMENTO DEL FORM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormAccesso_Load(object sender, EventArgs e)
+        {
+            /// PROVO CON TRY E CATCH A VEDERE SE ESISTE UN FILE CON I DATI DELL'UTENTE(TOKEN, ETC...)
+            /// SE ESISTE METTO SUBITO L'APP NEL SYSTEM TRY 
+            /// 
+            /// SE INVECE NON ESISTE APRO IL FORM NORMALMENTE NON FACENDO NULLA
+            try
+            {
+                userJson = string.Empty;
+                userJson = File.ReadAllText(@"user.json");
+                Login resultUser = JsonConvert.DeserializeObject<Login>(userJson);
+                local_token = resultUser.token;
+                if (local_token != null || local_token != "") success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
 
+            SystemTryAppTrasformation(success);// METTO L APP NEL SYSTEM TRY
+        }
     }
 }

@@ -48,7 +48,7 @@
             // tBoxCodice
             // 
             resources.ApplyResources(this.tBoxCodice, "tBoxCodice");
-            this.tBoxCodice.Name = "tBoxCodice";            
+            this.tBoxCodice.Name = "tBoxCodice";
             // 
             // btnCodiceAccesso
             // 
@@ -66,7 +66,8 @@
             this.Controls.Add(this.tBoxCodice);
             this.Controls.Add(this.txtCodice);
             this.MaximizeBox = false;
-            this.Name = "FormAccesso";           
+            this.Name = "FormAccesso";
+            this.Load += new System.EventHandler(this.FormAccesso_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
