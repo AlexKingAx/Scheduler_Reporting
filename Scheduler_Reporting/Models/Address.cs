@@ -16,7 +16,8 @@ namespace Scheduler_Reporting.Models
         public string? state { get; set; } = "";
 
         //SEMPRE COSI NON DEVE CAMBIARE
-        public const string type = "billing";
+        public string type { get; set; } = "billing";
+
         /// <summary>
         /// p.iva CLIENTE
         /// </summary>

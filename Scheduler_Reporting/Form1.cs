@@ -15,7 +15,7 @@ namespace Scheduler_Reporting
 {
     public partial class FormAccesso : Form
     {
-        public string token = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
+        public string token;
         private const string token_prova = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
         private const string connStringReporting = "Data Source=80.88.87.40; Database=w133edy7_reporting; User Id=w133edy7_rootreporting; Password=password;";
         private const string connStringDrVeto = "Data Source=(localDb)\\MSSQLLocalDB; Initial Catalog=DrVeto; Trusted_Connection=True";
@@ -26,8 +26,6 @@ namespace Scheduler_Reporting
 
         // LISTA DI OGGETTI FATTURE CHE ARRIVANO DA DRV
         public List<Data> listForReporting = new List<Data>();
-
-        string test = String.Format("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
 
 
         public FormAccesso()
@@ -109,12 +107,12 @@ namespace Scheduler_Reporting
         /// <summary>
         /// ESEGUE METODO DI PER LA SINCRONIZZAZIONE DEI DATI
         /// </summary>
-        private void OnSyncClicked(object? sender, EventArgs e)
+        private async void OnSyncClicked(object? sender, EventArgs e)
         {
             //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
             SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
             connDrVeto.Open();
-            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLpxu as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email Cliente', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Uid as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'PROVINCIA','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid where FCtyp = 'Facture'";
+            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLpxu as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
             SqlDataReader reader = sqlcmd.ExecuteReader();
 
@@ -122,13 +120,86 @@ namespace Scheduler_Reporting
 
             DatesTransformation(); // MODIFICO E INSERISCO I DATI NELLA LISTA 2 PER INVIO
 
-            string json = JsonConvert.SerializeObject(listForReporting);
+            await DataSender();// MANDA I DATI AL WEBSERVICE
 
-            MessageBox.Show(json);
+            //MESSAGGIO FINE SCAMBIO COMPLETATO
+            MessageBox.Show("Scambio avvenuto con successo", "Sincronizzazione dati", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            //CHIUSO LE CONNESSIONI
+
+
+            //string json = JsonConvert.SerializeObject(listForReporting);
+            //var obj_prova = new Data()
+            //{
+            //    invoice_date = "2022-07-01",
+            //    registration_date = "2022-07-01",
+            //    invoice_number = "100007",
+            //    document_type = "TD01",
+            //    description = "prova boh",
+            //    notes = "",
+            //    ritenuta = 5,
+            //    name = "Cliente Prova1",
+            //    phone = "3334454345",
+            //    website = "prova.it",
+            //    status = "COMPLETED",
+            //    email = "prova@gmail.com"
+
+            //};
+            //var tax_prova = new Tax() { percent = 10};
+            //var item_prova = new Item() { name = "oggetto 1", description = "Descrizione", quantity = 100, price = 100, family = "Oggetti", valid = true };
+            //item_prova.taxes.Add(tax_prova);
+            //var address_prova = new Address() {address_street_1 = "Via prova 99", address_street_2 = "interno 4", city = "Milano", country_id = 107, fiscalcode = "CLIGNR98L06O756M", state = "CN", type = "billing", vatnumber = "CLIGNR98L06O756M", zip = "99999",  };
+            //obj_prova.addresses.Add(address_prova);
+            //obj_prova.items.Add(item_prova);
+            //string json_prova = JsonConvert.SerializeObject(obj_prova);
+
+
+
+            //MessageBox.Show(json);
+
+            //CHIUSO LE CONNESSIONI DA DRVETO
             sqlcmd.Dispose();
             connDrVeto.Dispose();
+
+
+
+
+        }
+
+        /// <summary>
+        /// METODO CHE MANDA I DATI SU REPORTING
+        /// </summary>
+        /// <returns></returns>
+        private async Task DataSender()
+        {
+            var url = "http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/import";
+            string json;
+            foreach (var item in listForReporting)
+            {
+                json = JsonConvert.SerializeObject(item);
+
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept
+                    .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                    client.DefaultRequestHeaders.ConnectionClose = true;
+
+                    //var content = new FormUrlEncodedContent(values);
+                    //HttpResponseMessage response = new HttpResponseMessage();
+                    //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                    var response = await client.PostAsync(url, data);
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+
+                    //MessageBox.Show(responseBody);
+                }
+            }
         }
 
         /// <summary>
@@ -137,11 +208,8 @@ namespace Scheduler_Reporting
         /// <param name="reader">DATI PRESI DALLA QUERY</param>
         private void DataPicker(SqlDataReader reader)
         {
-            var i = 0; // VAR CHE SERVE PER INCREMENTO LOCALE 
-
             while (reader.Read())
             {
-
                 var statusVar = reader.GetBoolean("Status"); // PRENDO IL VALORE CHE CE ALL'INTERNO DELLA RESPONDE DI STATUS
 
                 string? statusString = null; // CREO VARIABILE CHE MI SERVE PER PASSARE LO STATO DI PAGAMENTO NEL MODO CORRETTO  
@@ -156,7 +224,20 @@ namespace Scheduler_Reporting
                 var data = new Data();
                 try
                 {
-                    data.invoice_date = reader.GetDateTime("Data Fattura");
+                    //GESTIONE DEL CORRETTO FORMATO PER LA DATA DA INSERIRE
+                    var datetime = reader.GetDateTime("Data Fattura");
+                    string year = datetime.Year.ToString();
+                    string month = datetime.Month.ToString();
+                    string day = datetime.Day.ToString();
+                    
+                    if(datetime.Month < 10 && datetime.Day <10) data.invoice_date = year + "-0" + month + "-0" + day;
+
+                    else if(datetime.Month < 10) data.invoice_date = year + "-0" + month + "-" + day;
+
+                    else if (datetime.Day < 10) data.invoice_date = year + "-" + month + "-0" + day;
+
+                    else data.invoice_date = year + "-" + month + "-" + day;
+
                 }
                 catch (Exception er)
                 {
@@ -164,7 +245,19 @@ namespace Scheduler_Reporting
                 }
                 try
                 {
-                    data.registration_date = reader.GetDateTime("Data Aggiornamento");
+                    //GESTIONE DEL CORRETTO FORMATO PER LA DATA DA INSERIRE
+                    var datetime = reader.GetDateTime("Data Aggiornamento");
+                    string year = datetime.Year.ToString();
+                    string month = datetime.Month.ToString();
+                    string day = datetime.Day.ToString();
+
+                    if (datetime.Month < 10 && datetime.Day < 10) data.registration_date = year + "-0" + month + "-0" + day;
+
+                    else if (datetime.Month < 10) data.registration_date = year + "-0" + month + "-" + day;
+
+                    else if (datetime.Day < 10) data.registration_date = year + "-" + month + "-0" + day;
+
+                    else data.registration_date = year + "-" + month + "-" + day;
                 }
                 catch (Exception er)
                 {
@@ -180,7 +273,9 @@ namespace Scheduler_Reporting
                 }
                 try
                 {
-                    data.document_type = reader.GetString("Tipologia Documento");
+                    var d_type = reader.GetString("Tipologia Documento");
+                    if(d_type == "Facture") data.document_type = "TD01";
+
                 }
                 catch (Exception er)
                 {
@@ -212,7 +307,8 @@ namespace Scheduler_Reporting
                 }
                 try
                 {
-                    data.name = reader.GetString("Nome Cliente");
+                    data.name = reader.GetString("Nome Cliente") + " ";
+                    data.name += reader.GetString("Cognome");
                 }
                 catch (Exception er)
                 {
@@ -228,15 +324,12 @@ namespace Scheduler_Reporting
                 }
                 try
                 {
-                    data.email = reader.GetString("Email Cliente");
+                    data.email = reader.GetString("Email");                    
                 }
                 catch (Exception er)
                 {
 
                 }
-
-                i++;// PER INCREMENTO AUTOMATICO.
-                    // P.S DA VEDERE COME SETTARE IL NOME ITEM
 
                 // TOLGO LA VIRGOLA AL PREZZO, SICCOME LO VUOLE COME INTERO
                 var priceVar = reader.GetDecimal("Price");
@@ -245,9 +338,9 @@ namespace Scheduler_Reporting
 
 
                 // PRENDO RIGA FATTURA
-                var item = new Item()
+                var item = new Item();
                 {
-                    name = "Riga " + i
+                    item.name = "Riga " + reader.GetString("Descrizione Riga");
                     //fctax
                     //indtax
                     //valid
@@ -326,7 +419,7 @@ namespace Scheduler_Reporting
                 }
 
                 //AGGIUNGO RIGA ALLA FATTURA
-                data.Items.Add(item);
+                data.items.Add(item);
 
                 //PRENDO GLI INDIRIZZI E I DATI DEL CLIENTE
                 var address = new Address();
@@ -356,6 +449,19 @@ namespace Scheduler_Reporting
                 }
                 try
                 {
+                    var nation = reader.GetString("Nazione");
+                    if (nation == "ITALIA")
+                    {
+                        address.country_id = 107;
+                    }
+
+                }
+                catch (Exception er)
+                {
+
+                }
+                try
+                {
                     address.fiscalcode = reader.GetString("CF Cliente");
                 }
                 catch (Exception er)
@@ -364,7 +470,7 @@ namespace Scheduler_Reporting
                 }
                 try
                 {
-                    address.state = reader.GetString("PROVINCIA");
+                    address.state = reader.GetString("Provincia");
                 }
                 catch (Exception er)
                 {
@@ -389,7 +495,7 @@ namespace Scheduler_Reporting
 
 
                 //AGGIUNGO DATI CLIENTE IN GENERAL DATA
-                data.Addresses.Add(address);
+                data.addresses.Add(address);
 
                 // AGGIUNGO RIGA DELLA QUERIY SCOMPOSTA NEI VARI DATI ALLA LISTA DATI FROM DRVETO
                 listFromDrVeto.Add(data);
@@ -421,7 +527,7 @@ namespace Scheduler_Reporting
                         // PASSO LE RIGHE FATTURE NEL CASO CI SIA UN DOPPIONE ALL'INTERNO
                         // DELLA LISTA FROM DR VETO. 
                         // DOPO DI CHE LO AGGIUNGO ALL'ELEMNTO CHE SARA MESSO NELLA LISTA FOR REPORTING. 
-                        element.Items.AddRange(obj.Items);
+                        element.items.AddRange(obj.items);
 
                         listForReporting.Add(element);// LO REINSERISCO AGGIORNATO                   
                     }
@@ -512,7 +618,6 @@ namespace Scheduler_Reporting
         /// </summary>
         private async Task<bool> ConnReporting()
         {
-            var values = new Dictionary<string, string>();
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept
