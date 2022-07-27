@@ -19,7 +19,9 @@ namespace Scheduler_Reporting.Models
         public string notes { get; set; } = "";
         public int ritenuta { get; set; }
         public string? status { get; set; } = null;
-        public int? due_amount { get; set; } 
+        public int? due_amount { get; set; }
+        
+        public uint? structure_id { get; set; }
         public List<Item> items { get; set; } = new List<Item>();
         public string? name { get; set; } = "";
         public string? phone { get; set; } = "";

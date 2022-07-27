@@ -30,7 +30,7 @@ namespace Scheduler_Reporting
         public List<Data> listForReporting = new List<Data>();
 
         public Login local_user = new Login();
-
+        private List<Structure>? structures;
 
         public FormAccesso()
         {
@@ -116,6 +116,13 @@ namespace Scheduler_Reporting
         /// </summary>
         private async void OnSyncClicked(object? sender, EventArgs e)
         {
+            // AGGIORNO VOCE MENU
+            AddingMenuItems(updating: true);
+
+            // AZZERO LE LISTE 
+            listForReporting = new List<Data>();
+            listFromDrVeto= new List<Data>();
+
             //GET TABELLA STRUTTURE
             await GetStructureTable();
 
@@ -228,7 +235,7 @@ namespace Scheduler_Reporting
         /// QUESTO METODO MI AGGIUNGE GLI ITEMS NEL MENU DEL NOTIFFYICON
         /// IN BASSO A DESTRA
         /// </summary>
-        private void AddingMenuItems()
+        private void AddingMenuItems(bool updating = false)
         {
             notifyIcon1.ContextMenuStrip.Items.Clear();
 
@@ -236,7 +243,8 @@ namespace Scheduler_Reporting
             /// (string text, Image image, EventHandler onClick);
             /// LE FOTO VANNO NELLA CARTELLA BIN/DEBUG ALTRIMENTI NON LE PRENDE                
             notifyIcon1.ContextMenuStrip.Items.Add("Stato " + local_user.last_sync, Image.FromFile("icons/setting.ico"), OnStausClicked);
-            notifyIcon1.ContextMenuStrip.Items.Add("Esegui sincronizzazione", Image.FromFile("icons/transfer-arrow.ico"), OnSyncClicked);
+            if (updating) notifyIcon1.ContextMenuStrip.Items.Add("Sincr. in corso", Image.FromFile("icons/transfer-arrow.ico"));
+            else notifyIcon1.ContextMenuStrip.Items.Add("Esegui sincronizzazione", Image.FromFile("icons/transfer-arrow.ico"), OnSyncClicked);
             notifyIcon1.ContextMenuStrip.Items.Add("Termina applicazione", Image.FromFile("icons/close.ico"), OnCloseClicked);
         }
 
@@ -261,6 +269,7 @@ namespace Scheduler_Reporting
                 var response = await client.GetAsync(url);
 
                 string responseBody = response.Content.ReadAsStringAsync().Result;
+                structures = JsonConvert.DeserializeObject<List<Structure>>(responseBody);
             }
         }
 
@@ -322,6 +331,21 @@ namespace Scheduler_Reporting
                 // TOLGO LA VIRGOLA ALLA RITENUTA, SICCOME LO VUOLE COME INTERO
                 var ritenutaVar = reader.GetDecimal("Ritenuta Acconto");
                 ritenutaVar = ritenutaVar * 100;
+
+                // GESTINE STRUTTURE
+                try
+                {
+                    if (!string.IsNullOrEmpty(reader.GetString("Codice Struttura")))
+                    {
+                        var str = reader.GetString("Codice Struttura");
+                        string trimmedStr = String.Concat(str.Where(c => !Char.IsWhiteSpace(c))); // TOLGO GLI SPAZI BIANCHI PER SICUREZZA
+                        var structure = structures.First(n => n.invoice_code == trimmedStr);
+                        data.structure_id = structure.id;                        
+                    }
+                }
+                catch (Exception){ }
+
+                
 
                 
                 try
