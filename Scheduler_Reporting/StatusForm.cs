@@ -7,19 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Scheduler_Reporting;
+using Scheduler_Reporting.Models;
 
 namespace Scheduler_Reporting
 {
     public partial class StatusForm : Form
     {
+        public string? userJson;
+        public Login local_user;
         public StatusForm()
         {
             InitializeComponent();
+            userJson = File.ReadAllText("user.json");
+            local_user = JsonConvert.DeserializeObject<Login>(userJson);
         }
 
         private void btnChiudi_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void StatusForm_Load(object sender, EventArgs e)
+        {
+            tBoxUltimoScambio.Text = local_user.last_sync.ToString();
         }
     }
 }

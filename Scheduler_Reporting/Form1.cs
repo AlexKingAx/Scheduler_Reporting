@@ -15,10 +15,10 @@ namespace Scheduler_Reporting
 {
     public partial class FormAccesso : Form
     {
-        public string? local_token;
-        private const string token_prova = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
-        private const string connStringReporting = "Data Source=80.88.87.40; Database=w133edy7_reporting; User Id=w133edy7_rootreporting; Password=password;";
+        
+        private const string token_prova = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";        
         private const string connStringDrVeto = "Data Source=(localDb)\\MSSQLLocalDB; Initial Catalog=DrVeto; Trusted_Connection=True";
+        //public string? local_token; // TOKEN PER ACCEDERE A REPOTING
         private string? query;
         private string? userJson;        
         private bool success = false;// VAR PER SYSTEM TRAY (SE AVVIENE CON SUCCESSO TUTTO ALLORA TRUE)
@@ -29,19 +29,42 @@ namespace Scheduler_Reporting
         // LISTA DI OGGETTI FATTURE CHE ARRIVANO DA DRV
         public List<Data> listForReporting = new List<Data>();
 
+        public Login local_user = new Login();
+
 
         public FormAccesso()
         {
             InitializeComponent();            
         }
 
-
-
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        /// <summary>
+        /// METODO CHE VIENE ESEGUITO DURANTE IL CARICAMENTO DEL FORM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormAccesso_Load(object sender, EventArgs e)
         {
 
-        }
+            /// PROVO CON TRY E CATCH A VEDERE SE ESISTE UN FILE CON I DATI DELL'UTENTE(TOKEN, ETC...)
+            /// SE ESISTE METTO SUBITO L'APP NEL SYSTEM TRY 
+            /// 
+            /// SE INVECE NON ESISTE APRO IL FORM NORMALMENTE NON FACENDO NULLA
+            try
+            {
+                userJson = string.Empty;
+                userJson = File.ReadAllText(@"user.json");
+                local_user = JsonConvert.DeserializeObject<Login>(userJson);
 
+                if (local_user.token != null || local_user.token != "") success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
+
+            SystemTryAppTrasformation(success);// METTO L APP NEL SYSTEM TRY
+
+        }
 
         /// <summary>
         /// FUNZIONE CHE SI SCATENA AL CLICK SU INIZIA
@@ -52,13 +75,13 @@ namespace Scheduler_Reporting
         {            
 
             //token = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
-            if (local_token == null || local_token == "" && !success)
+            if (local_user.token == null || local_user.token == "" && !success)
             {
                 /// PRENDO VALORE DALLA TXTBOX
-                local_token = tBoxCodice.Text;
+                local_user.token = tBoxCodice.Text;
 
                 /// MESSAGGIO DI ERRORE
-                if (local_token == null || local_token == "")
+                if (local_user.token == null || local_user.token == "")
                 {
                     //MOSTRA MSG "manca token"
                     MessageBox.Show(
@@ -80,6 +103,65 @@ namespace Scheduler_Reporting
             ///SE TUTTO E CORRETTO ALLORA METTO L'APP NEL SYSTEM TRAY
             SystemTryAppTrasformation(success);
 
+        }
+
+        //CHIUSURA
+        private void OnCloseClicked(object? sender, EventArgs e)
+        {
+            if (MessageBox.Show("Sei sicuro di uscire dall'applicazione?", "Exit message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) Application.Exit();
+        }
+
+        /// <summary>
+        /// ESEGUE METODO DI PER LA SINCRONIZZAZIONE DEI DATI
+        /// </summary>
+        private async void OnSyncClicked(object? sender, EventArgs e)
+        {
+            //GET TABELLA STRUTTURE
+            await GetStructureTable();
+
+            //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
+            SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
+            connDrVeto.Open();
+            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
+            SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
+            SqlDataReader reader = sqlcmd.ExecuteReader();
+
+            DataPicker(reader); // PRENDO E INSERISCO I DATI NELLA LISTA 1
+
+            DatesTransformation(); // MODIFICO E INSERISCO I DATI NELLA LISTA 2 PER INVIO
+
+            await DataSender();// MANDA I DATI AL WEBSERVICE
+
+            // MESSAGGIO FINE SCAMBIO COMPLETATO
+            MessageBox.Show("Scambio avvenuto con successo", "Sincronizzazione dati", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // SALVO LA DATA DELLO SCAMBIO            
+            userJson = File.ReadAllText("user.json");
+            local_user = JsonConvert.DeserializeObject<Login>(userJson);
+            local_user.last_sync = DateTime.Now;
+            userJson = JsonConvert.SerializeObject(local_user);
+            File.WriteAllText("user.json", userJson);
+
+            AddingMenuItems();// RICHIAMO IL METODO CHE SCRIVE GLI ITEMS DEL MENU COSI, MI AGGIORNA LO STATO ULTIMO SCAMBIO
+
+
+            //CHIUSO LE CONNESSIONI DA DRVETO
+            sqlcmd.Dispose();
+            connDrVeto.Dispose();
+
+        }        
+
+        /// <summary>
+        /// METODO CH VIENE ESEGUITO AL CLICK SU STATO NEL 
+        /// SYSTEM TRAY
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void OnStausClicked(object? sender, EventArgs e)
+        {
+            StatusForm statusForm = new StatusForm();
+            statusForm.ShowDialog();
         }
 
         /// <summary>
@@ -116,14 +198,10 @@ namespace Scheduler_Reporting
             /// PER RENDERLI DISPONIBILI AL PROSSIMO RIAVVIO
             if (success == true)
             {
-                var user = new Login() { token = local_token };
-                userJson = JsonConvert.SerializeObject(user);
+                //var user = new Login() { token = local_token };
+                userJson = JsonConvert.SerializeObject(local_user);
                 File.WriteAllText(@"user.json", userJson);
 
-                //PRENDO I DATI DAL FILE JSON
-                userJson = string.Empty;
-                userJson = File.ReadAllText(@"user.json");
-                Login resultUser = JsonConvert.DeserializeObject<Login>(userJson);
             }
         }
 
@@ -141,81 +219,49 @@ namespace Scheduler_Reporting
                 this.Visible = false;
                 ///INIZIALIZZO IL MENU E E CREO GLI ELEMENTI
                 notifyIcon1.ContextMenuStrip = new ContextMenuStrip();
-                /// DATI DA INSERIRE NEL METODO ADD
-                /// (string text, Image image, EventHandler onClick);
-                /// LE FOTO VANNO NELLA CARTELLA BIN/DEBUG ALTRIMENTI NON LE PRENDE                
-                notifyIcon1.ContextMenuStrip.Items.Add("Stato", Image.FromFile("icons/setting.ico"), OnStausClicked);
-                notifyIcon1.ContextMenuStrip.Items.Add("Esegui sincronizzazione", Image.FromFile("icons/transfer-arrow.ico"), OnSyncClicked);
-                notifyIcon1.ContextMenuStrip.Items.Add("Termina applicazione", Image.FromFile("icons/close.ico"), OnCloseClicked);
+                AddingMenuItems();
 
             }
         }
 
-        //CHIUSURA
-        private void OnCloseClicked(object? sender, EventArgs e)
+        /// <summary>
+        /// QUESTO METODO MI AGGIUNGE GLI ITEMS NEL MENU DEL NOTIFFYICON
+        /// IN BASSO A DESTRA
+        /// </summary>
+        private void AddingMenuItems()
         {
-            if (MessageBox.Show("Sei sicuro di uscire dall'applicazione?", "Exit message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) Application.Exit();
+            notifyIcon1.ContextMenuStrip.Items.Clear();
+
+            /// DATI DA INSERIRE NEL METODO ADD
+            /// (string text, Image image, EventHandler onClick);
+            /// LE FOTO VANNO NELLA CARTELLA BIN/DEBUG ALTRIMENTI NON LE PRENDE                
+            notifyIcon1.ContextMenuStrip.Items.Add("Stato " + local_user.last_sync, Image.FromFile("icons/setting.ico"), OnStausClicked);
+            notifyIcon1.ContextMenuStrip.Items.Add("Esegui sincronizzazione", Image.FromFile("icons/transfer-arrow.ico"), OnSyncClicked);
+            notifyIcon1.ContextMenuStrip.Items.Add("Termina applicazione", Image.FromFile("icons/close.ico"), OnCloseClicked);
         }
 
         /// <summary>
-        /// ESEGUE METODO DI PER LA SINCRONIZZAZIONE DEI DATI
+        /// METODO CHE MI RITORNA LA TAB STRUTTURE
         /// </summary>
-        private async void OnSyncClicked(object? sender, EventArgs e)
+        /// <returns></returns>
+        private async Task GetStructureTable()
         {
-            //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
-            SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
-            connDrVeto.Open();
-            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLpxu as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
-            SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
-            SqlDataReader reader = sqlcmd.ExecuteReader();
+            string url = "http://reporting.alcyonsoluzionidigitali.it/api/v1/structures";
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            DataPicker(reader); // PRENDO E INSERISCO I DATI NELLA LISTA 1
+                client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", local_user.token);
 
-            DatesTransformation(); // MODIFICO E INSERISCO I DATI NELLA LISTA 2 PER INVIO
+                client.DefaultRequestHeaders.ConnectionClose = true;
+                                
+                //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                var response = await client.GetAsync(url);
 
-            await DataSender();// MANDA I DATI AL WEBSERVICE
-
-            //MESSAGGIO FINE SCAMBIO COMPLETATO
-            MessageBox.Show("Scambio avvenuto con successo", "Sincronizzazione dati", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-
-            //string json = JsonConvert.SerializeObject(listForReporting);
-            //var obj_prova = new Data()
-            //{
-            //    invoice_date = "2022-07-01",
-            //    registration_date = "2022-07-01",
-            //    invoice_number = "100007",
-            //    document_type = "TD01",
-            //    description = "prova boh",
-            //    notes = "",
-            //    ritenuta = 5,
-            //    name = "Cliente Prova1",
-            //    phone = "3334454345",
-            //    website = "prova.it",
-            //    status = "COMPLETED",
-            //    email = "prova@gmail.com"
-
-            //};
-            //var tax_prova = new Tax() { percent = 10};
-            //var item_prova = new Item() { name = "oggetto 1", description = "Descrizione", quantity = 100, price = 100, family = "Oggetti", valid = true };
-            //item_prova.taxes.Add(tax_prova);
-            //var address_prova = new Address() {address_street_1 = "Via prova 99", address_street_2 = "interno 4", city = "Milano", country_id = 107, fiscalcode = "CLIGNR98L06O756M", state = "CN", type = "billing", vatnumber = "CLIGNR98L06O756M", zip = "99999",  };
-            //obj_prova.addresses.Add(address_prova);
-            //obj_prova.items.Add(item_prova);
-            //string json_prova = JsonConvert.SerializeObject(obj_prova);
-
-
-
-            //MessageBox.Show(json);
-
-            //CHIUSO LE CONNESSIONI DA DRVETO
-            sqlcmd.Dispose();
-            connDrVeto.Dispose();
-
-
-
-
+                string responseBody = response.Content.ReadAsStringAsync().Result;
+            }
         }
 
         /// <summary>
@@ -238,19 +284,16 @@ namespace Scheduler_Reporting
                     .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", local_token);
+                    new AuthenticationHeaderValue("Bearer", local_user.token);
 
                     client.DefaultRequestHeaders.ConnectionClose = true;
 
-                    //var content = new FormUrlEncodedContent(values);
-                    //HttpResponseMessage response = new HttpResponseMessage();
                     //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                     var response = await client.PostAsync(url, data);
 
-                    string responseBody = await response.Content.ReadAsStringAsync();
+                    string responseBody = response.Content.ReadAsStringAsync().Result;
 
-
-                    //MessageBox.Show(responseBody);
+                    Thread.Sleep(2000);
                 }
             }
         }
@@ -265,16 +308,22 @@ namespace Scheduler_Reporting
             {
                 var statusVar = reader.GetBoolean("Status"); // PRENDO IL VALORE CHE CE ALL'INTERNO DELLA RESPONDE DI STATUS
 
+                // CLASSE PRINCIPALE PER RACCOLTA DATI
+                var data = new Data();
+
                 string? statusString = null; // CREO VARIABILE CHE MI SERVE PER PASSARE LO STATO DI PAGAMENTO NEL MODO CORRETTO  
 
-                if (statusVar) statusString = "COMPLETED"; // ASSEGNO IL VALORE COMPLETED SE NELLA RESPONSE TROVO TRUE O 1
+                if (statusVar)
+                {
+                    statusString = "COMPLETED"; // ASSEGNO IL VALORE COMPLETED SE NELLA RESPONSE TROVO TRUE O 1
+                    data.due_amount = 0;
+                }
 
                 // TOLGO LA VIRGOLA ALLA RITENUTA, SICCOME LO VUOLE COME INTERO
                 var ritenutaVar = reader.GetDecimal("Ritenuta Acconto");
                 ritenutaVar = ritenutaVar * 100;
 
-                // CLASSE PRINCIPALE PER RACCOLTA DATI
-                var data = new Data();
+                
                 try
                 {
                     //GESTIONE DEL CORRETTO FORMATO PER LA DATA DA INSERIRE
@@ -556,6 +605,21 @@ namespace Scheduler_Reporting
             }
         }
 
+        //private T prova<T>(SqlDataReader reader, string s)
+        //{
+        //    try
+        //    {
+        //        switch (T.class)
+        //        {
+        //            default:
+        //            break;
+        //        }
+        //        return reader.GetString
+        //    }
+        //    catch (Exception)
+        //    {                
+        //    }
+        //}
         private void DatesTransformation()
         {
             foreach (var obj in listFromDrVeto)
@@ -586,21 +650,7 @@ namespace Scheduler_Reporting
                     }
                 }
             }
-        }
-
-
-        /// <summary>
-        /// METODO CH VIENE ESEGUITO AL CLICK SU STATO NEL 
-        /// SYSTEM TRAY
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void OnStausClicked(object? sender, EventArgs e)
-        {
-            StatusForm statusForm = new StatusForm();
-            statusForm.ShowDialog();
-        }
+        }        
 
         private async Task<bool> Connection_Test()
         {
@@ -677,7 +727,7 @@ namespace Scheduler_Reporting
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", local_token);
+                new AuthenticationHeaderValue("Bearer", local_user.token);
 
                 client.DefaultRequestHeaders.ConnectionClose = true;
 
@@ -696,33 +746,6 @@ namespace Scheduler_Reporting
                 }
             }
             return false;
-        }
-
-        /// <summary>
-        /// METODO CHE VIENE ESEGUITO DURANTE IL CARICAMENTO DEL FORM
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FormAccesso_Load(object sender, EventArgs e)
-        {
-            /// PROVO CON TRY E CATCH A VEDERE SE ESISTE UN FILE CON I DATI DELL'UTENTE(TOKEN, ETC...)
-            /// SE ESISTE METTO SUBITO L'APP NEL SYSTEM TRY 
-            /// 
-            /// SE INVECE NON ESISTE APRO IL FORM NORMALMENTE NON FACENDO NULLA
-            try
-            {
-                userJson = string.Empty;
-                userJson = File.ReadAllText(@"user.json");
-                Login resultUser = JsonConvert.DeserializeObject<Login>(userJson);
-                local_token = resultUser.token;
-                if (local_token != null || local_token != "") success = true;
-            }
-            catch (Exception)
-            {
-                success = false;
-            }
-
-            SystemTryAppTrasformation(success);// METTO L APP NEL SYSTEM TRY
-        }
+        }       
     }
 }

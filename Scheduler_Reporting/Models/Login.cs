@@ -9,6 +9,6 @@ namespace Scheduler_Reporting.Models
     public class Login
     {
        public string? token { get; set; }
-       public string? last_sync { get; set; }
+       public DateTime? last_sync { get; set; }
     }
 }
