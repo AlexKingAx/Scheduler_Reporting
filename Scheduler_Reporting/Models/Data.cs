@@ -27,7 +27,7 @@ namespace Scheduler_Reporting.Models
         public string? phone { get; set; } = "";
         public string? website { get; set; } = "";
         public string? email { get; set; } = null;  
-        public List<Address> addresses { get; set; } = new List<Address>();
+        public List<Address> addresses { get; set; } = new List<Address>();        
 
 
 

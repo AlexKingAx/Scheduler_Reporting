@@ -20,6 +20,7 @@ namespace Scheduler_Reporting.Models
         public List<Tax> taxes { get; set; } = new List<Tax>();
         public bool fctax { get; set; } = false;
         public bool indtax { get; set; } = false;
+        public int? enpav { get; set; }
         public bool? valid { get; set; } = true;
 
 

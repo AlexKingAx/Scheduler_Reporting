@@ -129,7 +129,7 @@ namespace Scheduler_Reporting
             //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
             SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
             connDrVeto.Open();
-            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
+            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmtENPAV as 'Enpav', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
             SqlDataReader reader = sqlcmd.ExecuteReader();
 
@@ -302,7 +302,7 @@ namespace Scheduler_Reporting
 
                     string responseBody = response.Content.ReadAsStringAsync().Result;
 
-                    Thread.Sleep(2000);
+                    Thread.Sleep(100);
                 }
             }
         }
@@ -457,14 +457,38 @@ namespace Scheduler_Reporting
 
                 }
 
-                // TOLGO LA VIRGOLA AL PREZZO, SICCOME LO VUOLE COME INTERO
-                var priceVar = reader.GetDecimal("Price");
-                priceVar = priceVar * 100;
-
-
-
                 // PRENDO RIGA FATTURA
                 var item = new Item();
+
+                try
+                {
+                    // TOLGO LA VIRGOLA AL PREZZO, SICCOME LO VUOLE COME INTERO
+                    var priceVar = reader.GetDecimal("Price");
+                    priceVar = priceVar * 100;
+                    item.price = (int)priceVar;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(
+                    "Import sbagliato, totale mancante",
+                    "Errore di collegamento",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
+                    return;
+                }
+
+                try
+                {
+                    // TOLGO LA VIRGOLA ALL'ENPAV, COME INTERO
+                    var enpavVar = reader.GetDecimal("Enpav");
+                    enpavVar = enpavVar * 100;
+                    item.enpav = (int)enpavVar;
+                }
+                catch (Exception)
+                {
+                }
+
                 {
                     item.name = "Riga " + reader.GetString("Descrizione Riga");
                     //fctax
@@ -490,14 +514,6 @@ namespace Scheduler_Reporting
                 try
                 {
                     item.quantity = (int)reader.GetDecimal("QTA");
-                }
-                catch (Exception er)
-                {
-
-                }
-                try
-                {
-                    item.price = (int)priceVar;
                 }
                 catch (Exception er)
                 {
