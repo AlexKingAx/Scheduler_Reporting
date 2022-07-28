@@ -4,9 +4,9 @@
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
 "ProjectName" = "8:Scheduler_Setup"
-"LanguageId" = "3:1033"
+"LanguageId" = "3:1040"
 "CodePage" = "3:1252"
-"UILanguageId" = "3:1033"
+"UILanguageId" = "3:1040"
 "SccProjectName" = "8:"
 "SccLocalPath" = "8:"
 "SccAuxPath" = "8:"
@@ -15,13 +15,31 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_38DB2C5AC1CE43B1B2487838B14512F7"
+        "MsmKey" = "8:_0A3286049C124DFB85C194B71937258B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D94E3E895AB14C479D102F0C4A6F4016"
+        "MsmKey" = "8:_65D951150E1F4638B2751690CCC85DB6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_969715D287104FDB8CD60E0A4A0C2F27"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9754FE99FB714C7B8D2BCDD2813E5D70"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A09E041C271D4DC096FE0B49BB83D3CA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +61,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -59,6 +85,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -90,12 +124,72 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D94E3E895AB14C479D102F0C4A6F4016"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0A3286049C124DFB85C194B71937258B"
+            {
+            "SourcePath" = "8:..\\Scheduler_Reporting\\bin\\Debug\\net6.0-windows\\icons\\setting.ico"
+            "TargetName" = "8:setting.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_62482DB29B4045088295F7AA477E5F76"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_969715D287104FDB8CD60E0A4A0C2F27"
             {
             "SourcePath" = "8:..\\Scheduler_Reporting\\bin\\Debug\\net6.0-windows\\icons\\favicon-alcyon.ico"
             "TargetName" = "8:favicon-alcyon.ico"
             "Tag" = "8:"
-            "Folder" = "8:_FCB31A9E57C6478EBFF953DAE1F91399"
+            "Folder" = "8:_62482DB29B4045088295F7AA477E5F76"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9754FE99FB714C7B8D2BCDD2813E5D70"
+            {
+            "SourcePath" = "8:..\\Scheduler_Reporting\\bin\\Debug\\net6.0-windows\\icons\\transfer-arrow.ico"
+            "TargetName" = "8:transfer-arrow.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_62482DB29B4045088295F7AA477E5F76"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A09E041C271D4DC096FE0B49BB83D3CA"
+            {
+            "SourcePath" = "8:..\\Scheduler_Reporting\\bin\\Debug\\net6.0-windows\\icons\\close.ico"
+            "TargetName" = "8:close.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_62482DB29B4045088295F7AA477E5F76"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -148,6 +242,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_62482DB29B4045088295F7AA477E5F76"
+                    {
+                    "Name" = "8:icons"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_C819ADB4362641FBA4C4E417AD0E2ED2"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -159,7 +264,7 @@
         }
         "MsiBootstrapper"
         {
-        "LangId" = "3:1033"
+        "LangId" = "3:1040"
         "RequiresElevation" = "11:FALSE"
         }
         "Product"
@@ -178,7 +283,7 @@
         "Manufacturer" = "8:Alcyon"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Scheduler_Setup"
+        "Title" = "8:Scheduler Reporting"
         "Subject" = "8:"
         "ARPCONTACT" = "8:CervidoWebAgency"
         "Keywords" = "8:"
@@ -287,7 +392,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8D79F00599B74772BB06D08C333E5172"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AA4199EBD6314871A3D1C7E481B1F296"
             {
             "Name" = "8:Scheduler Reporting"
             "Arguments" = "8:"
@@ -295,24 +400,24 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_38DB2C5AC1CE43B1B2487838B14512F7"
-            "Folder" = "8:_C550D7F1730E41A7818C79C782189EEC"
-            "WorkingFolder" = "8:_FCB31A9E57C6478EBFF953DAE1F91399"
-            "Icon" = "8:_D94E3E895AB14C479D102F0C4A6F4016"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C23C44967E82491BA0E0C34305369735"
-            {
-            "Name" = "8:Scheduler Reporting"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_38DB2C5AC1CE43B1B2487838B14512F7"
+            "Target" = "8:_65D951150E1F4638B2751690CCC85DB6"
             "Folder" = "8:_86E369CD76BE48DEB66F6404DE49E37B"
             "WorkingFolder" = "8:_FCB31A9E57C6478EBFF953DAE1F91399"
-            "Icon" = "8:_D94E3E895AB14C479D102F0C4A6F4016"
+            "Icon" = "8:_969715D287104FDB8CD60E0A4A0C2F27"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C074D00B63CA40F9A25860CCC4BAEB57"
+            {
+            "Name" = "8:Scheduler Reporting"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_65D951150E1F4638B2751690CCC85DB6"
+            "Folder" = "8:_C550D7F1730E41A7818C79C782189EEC"
+            "WorkingFolder" = "8:_FCB31A9E57C6478EBFF953DAE1F91399"
+            "Icon" = "8:_969715D287104FDB8CD60E0A4A0C2F27"
             "Feature" = "8:"
             }
         }
@@ -714,7 +819,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_38DB2C5AC1CE43B1B2487838B14512F7"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_65D951150E1F4638B2751690CCC85DB6"
             {
             "SourcePath" = "8:..\\Scheduler_Reporting\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
