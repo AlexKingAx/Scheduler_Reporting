@@ -33,5 +33,13 @@ namespace Scheduler_Reporting
         {
             tBoxUltimoScambio.Text = local_user.last_sync.ToString();
         }
+
+        private void Reset_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Sei sicuro di voler eseguire il reset?", "Reset message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                File.Delete(@"user.json"); Application.Restart(); Environment.Exit(0);
+            }
+        }
     }
 }
