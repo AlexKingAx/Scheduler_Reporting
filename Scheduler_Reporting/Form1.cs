@@ -15,10 +15,8 @@ namespace Scheduler_Reporting
 {
     public partial class FormAccesso : Form
     {
-        
-        private const string token_prova = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";        
-        private const string connStringDrVeto = "Data Source=(localDb)\\MSSQLLocalDB; Initial Catalog=DrVeto; Trusted_Connection=True";
-        //public string? local_token; // TOKEN PER ACCEDERE A REPOTING
+        public Login local_user = new Login();
+        private const string token_prova = "8|6wYGw55gvAdvPlqColmWowjHLr1UgEO6UDEEMm36";
         private string? query;
         private string? userJson;        
         private bool success = false;// VAR PER SYSTEM TRAY (SE AVVIENE CON SUCCESSO TUTTO ALLORA TRUE)
@@ -28,8 +26,7 @@ namespace Scheduler_Reporting
 
         // LISTA DI OGGETTI FATTURE CHE ARRIVANO DA DRV
         public List<Data> listForReporting = new List<Data>();
-
-        public Login local_user = new Login();
+        
         private List<Structure>? structures;
 
         public FormAccesso()
@@ -54,8 +51,9 @@ namespace Scheduler_Reporting
                 userJson = string.Empty;
                 userJson = File.ReadAllText(@"user.json");
                 local_user = JsonConvert.DeserializeObject<Login>(userJson);
-
+                local_user.SetDrvetoString();
                 if (local_user.token != null || local_user.token != "") success = true;
+
             }
             catch (Exception)
             {
@@ -79,6 +77,7 @@ namespace Scheduler_Reporting
             {
                 /// PRENDO VALORE DALLA TXTBOX
                 local_user.token = tBoxCodice.Text;
+                local_user.sql_server = tBoxSql.Text;
 
                 /// MESSAGGIO DI ERRORE
                 if (local_user.token == null || local_user.token == "")
@@ -95,6 +94,8 @@ namespace Scheduler_Reporting
                 }
                 success = true;
             }
+
+            local_user.SetDrvetoString();
 
             success = await ConnectionTester(success);// TESTO LE CONN
 
@@ -128,7 +129,7 @@ namespace Scheduler_Reporting
             await GetStructureTable();
 
             //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
-            SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
+            SqlConnection connDrVeto = new SqlConnection(local_user.connStringDrVeto);
             connDrVeto.Open();
             query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmtENPAV as 'Enpav', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
@@ -729,7 +730,7 @@ namespace Scheduler_Reporting
         /// </summary>
         private bool ConnDrVeto()
         {
-            SqlConnection connDrVeto = new SqlConnection(connStringDrVeto);
+            SqlConnection connDrVeto = new SqlConnection(local_user.connStringDrVeto);
             connDrVeto.Open();
             query = "select * from actes";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);

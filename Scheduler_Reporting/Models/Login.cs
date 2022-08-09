@@ -8,7 +8,13 @@ namespace Scheduler_Reporting.Models
 {
     public class Login
     {
-       public string? token { get; set; }
-       public DateTime? last_sync { get; set; }
+        public string connStringDrVeto;
+        public string? token { get; set; }
+        public string? sql_server { get; set; } = "(localDb)\\MSSQLLocalDB";
+        public DateTime? last_sync { get; set; }
+        public void SetDrvetoString()
+        {
+            this.connStringDrVeto = "Data Source=" + this.sql_server + "; Initial Catalog=DrVeto; Trusted_Connection=True"; 
+        }
     }
 }

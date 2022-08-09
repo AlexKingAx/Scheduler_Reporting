@@ -34,6 +34,9 @@
             this.txtCodice = new System.Windows.Forms.Label();
             this.tBoxCodice = new System.Windows.Forms.TextBox();
             this.btnCodiceAccesso = new System.Windows.Forms.Button();
+            this.txtSql = new System.Windows.Forms.Label();
+            this.tBoxSql = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -58,10 +61,28 @@
             this.btnCodiceAccesso.UseVisualStyleBackColor = false;
             this.btnCodiceAccesso.Click += new System.EventHandler(this.btnCodiceAccesso_Click);
             // 
+            // txtSql
+            // 
+            resources.ApplyResources(this.txtSql, "txtSql");
+            this.txtSql.Name = "txtSql";
+            // 
+            // tBoxSql
+            // 
+            resources.ApplyResources(this.tBoxSql, "tBoxSql");
+            this.tBoxSql.Name = "tBoxSql";
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
             // FormAccesso
             // 
             this.BackColor = System.Drawing.Color.White;
             resources.ApplyResources(this, "$this");
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tBoxSql);
+            this.Controls.Add(this.txtSql);
             this.Controls.Add(this.btnCodiceAccesso);
             this.Controls.Add(this.tBoxCodice);
             this.Controls.Add(this.txtCodice);
@@ -79,5 +100,8 @@
         private Label txtCodice;
         private TextBox tBoxCodice;
         private Button btnCodiceAccesso;
+        private Label txtSql;
+        private TextBox tBoxSql;
+        private Label label1;
     }
 }
