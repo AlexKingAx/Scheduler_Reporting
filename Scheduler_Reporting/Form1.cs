@@ -58,6 +58,7 @@ namespace Scheduler_Reporting
             catch (Exception)
             {
                 success = false;
+                checkBoxTrustedConn.Checked = true;
             }
 
             SystemTryAppTrasformation(success);// METTO L APP NEL SYSTEM TRY
@@ -77,7 +78,43 @@ namespace Scheduler_Reporting
             {
                 /// PRENDO VALORE DALLA TXTBOX
                 local_user.token = tBoxCodice.Text;
-                local_user.sql_server = tBoxSql.Text;
+                local_user.server_name = tBoxServerName.Text;
+                local_user.db_name = tBoxDBName.Text;
+                local_user.trusted_connection = false;
+
+                if (!local_user.trusted_connection)
+                {
+                    local_user.user_id = tBoxUserId.Text;
+                    local_user.password = tBoxPassword.Text;
+
+                    if (local_user.user_id == null || local_user.user_id == "")
+                    {
+                        //MOSTRA MSG "manca user id"
+                        MessageBox.Show(
+                            "Manca User id",
+                            "Errore di collegamento",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                            );
+                        success = false;
+                        return;
+                    }
+
+                    if (local_user.password == null || local_user.password == "")
+                    {
+                        //MOSTRA MSG "manca password"
+                        MessageBox.Show(
+                            "Manca password",
+                            "Errore di collegamento",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                            );
+                        success = false;
+                        return;
+                    }
+                }
+
+                
 
                 /// MESSAGGIO DI ERRORE
                 if (local_user.token == null || local_user.token == "")
@@ -92,17 +129,33 @@ namespace Scheduler_Reporting
                     success = false;
                     return;
                 }
+
+                if (local_user.db_name == null || local_user.db_name == "")
+                {
+                    //MOSTRA MSG "manca db_name"
+                    MessageBox.Show(
+                        "Manca nome del Database",
+                        "Errore di collegamento",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                        );
+                    success = false;
+                    return;
+                }
+
                 success = true;
             }
+            if (success)
+            {
+                local_user.SetDrvetoString();
 
-            local_user.SetDrvetoString();
+                success = await ConnectionTester(success);// TESTO LE CONN
 
-            success = await ConnectionTester(success);// TESTO LE CONN
+                LoginDataStoring(success);// CREO FILE JSON PER LA PRIMA VOLTA CON I DATI LOGIN
 
-            LoginDataStoring(success);// CREO FILE JSON PER LA PRIMA VOLTA CON I DATI LOGIN
-
-            ///SE TUTTO E CORRETTO ALLORA METTO L'APP NEL SYSTEM TRAY
-            SystemTryAppTrasformation(success);
+                ///SE TUTTO E CORRETTO ALLORA METTO L'APP NEL SYSTEM TRAY
+                SystemTryAppTrasformation(success);
+            }            
 
         }
 
@@ -788,6 +841,7 @@ namespace Scheduler_Reporting
                 }
             }
             return false;
-        }       
+        }
+
     }
 }
