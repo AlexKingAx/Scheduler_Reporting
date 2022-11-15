@@ -80,7 +80,7 @@ namespace Scheduler_Reporting
                 local_user.token = tBoxCodice.Text;
                 local_user.server_name = tBoxServerName.Text;
                 local_user.db_name = tBoxDBName.Text;
-                local_user.trusted_connection = false;
+                local_user.trusted_connection = checkBoxTrustedConn.Checked;
 
                 if (!local_user.trusted_connection)
                 {
@@ -178,7 +178,7 @@ namespace Scheduler_Reporting
             listFromDrVeto= new List<Data>();
 
             //GET TABELLA STRUTTURE
-            // MI GENERA UN ERRORE QUI --> DA VEDERE CON NUOVA VERSIONE
+            //MI GENERAVA UN ERRORE PERCHE NON AGGIORNAVA IL TOKEN
             await GetStructureTable();
 
             //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
@@ -319,7 +319,7 @@ namespace Scheduler_Reporting
                 new AuthenticationHeaderValue("Bearer", local_user.token);
 
                 client.DefaultRequestHeaders.ConnectionClose = true;
-                                
+
                 //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var response = await client.GetAsync(url);
 
