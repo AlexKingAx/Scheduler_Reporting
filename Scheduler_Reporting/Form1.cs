@@ -309,7 +309,7 @@ namespace Scheduler_Reporting
         /// <returns></returns>
         private async Task GetStructureTable()
         {
-            string url = "https://reporting.alcyonsoluzionidigitali.it/api/v1/structures";
+            string url = "http://reporting.alcyonsoluzionidigitali.it/api/v1/structures";
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept
@@ -334,7 +334,7 @@ namespace Scheduler_Reporting
         /// <returns></returns>
         private async Task DataSender()
         {
-            var url = "https://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/import";
+            var url = "http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/import";
             string json;
             foreach (var item in listForReporting)
             {
@@ -352,7 +352,7 @@ namespace Scheduler_Reporting
 
                     client.DefaultRequestHeaders.ConnectionClose = true;
 
-                    System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                    //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                     var response = await client.PostAsync(url, data);
 
                     string responseBody = response.Content.ReadAsStringAsync().Result;
@@ -828,8 +828,8 @@ namespace Scheduler_Reporting
 
                 //var content = new FormUrlEncodedContent(values);
                 //HttpResponseMessage response = new HttpResponseMessage();
-                System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                var response = await client.GetAsync("https://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
+                //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                var response = await client.GetAsync("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
                 //response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 //MessageBox.Show(responseBody);
