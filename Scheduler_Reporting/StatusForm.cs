@@ -41,5 +41,10 @@ namespace Scheduler_Reporting
                 File.Delete(@"user.json"); Application.Restart(); Environment.Exit(0);
             }
         }
+
+        private void btnTermina_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Sei sicuro di uscire dall'applicazione?", "Exit message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) Application.Exit();
+        }
     }
 }

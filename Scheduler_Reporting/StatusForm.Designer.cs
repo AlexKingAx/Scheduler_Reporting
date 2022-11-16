@@ -39,43 +39,40 @@
             // btnTermina
             // 
             this.btnTermina.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTermina.Location = new System.Drawing.Point(230, 175);
-            this.btnTermina.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnTermina.Location = new System.Drawing.Point(161, 105);
             this.btnTermina.Name = "btnTermina";
-            this.btnTermina.Size = new System.Drawing.Size(117, 63);
+            this.btnTermina.Size = new System.Drawing.Size(82, 38);
             this.btnTermina.TabIndex = 0;
             this.btnTermina.Text = "Termina";
             this.btnTermina.UseVisualStyleBackColor = true;
+            this.btnTermina.Click += new System.EventHandler(this.btnTermina_Click);
             // 
             // txtUltimaModifica
             // 
             this.txtUltimaModifica.AutoSize = true;
             this.txtUltimaModifica.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.txtUltimaModifica.Location = new System.Drawing.Point(17, 15);
-            this.txtUltimaModifica.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.txtUltimaModifica.Location = new System.Drawing.Point(12, 9);
             this.txtUltimaModifica.Name = "txtUltimaModifica";
-            this.txtUltimaModifica.Size = new System.Drawing.Size(279, 32);
+            this.txtUltimaModifica.Size = new System.Drawing.Size(188, 21);
             this.txtUltimaModifica.TabIndex = 1;
             this.txtUltimaModifica.Text = "ULTIMO SCAMBIO DATI:";
             // 
             // tBoxUltimoScambio
             // 
             this.tBoxUltimoScambio.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tBoxUltimoScambio.Location = new System.Drawing.Point(17, 72);
-            this.tBoxUltimoScambio.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tBoxUltimoScambio.Location = new System.Drawing.Point(12, 43);
             this.tBoxUltimoScambio.Name = "tBoxUltimoScambio";
             this.tBoxUltimoScambio.ReadOnly = true;
-            this.tBoxUltimoScambio.Size = new System.Drawing.Size(453, 39);
+            this.tBoxUltimoScambio.Size = new System.Drawing.Size(318, 29);
             this.tBoxUltimoScambio.TabIndex = 2;
             // 
             // btnChiudi
             // 
             this.btnChiudi.BackColor = System.Drawing.Color.Silver;
             this.btnChiudi.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnChiudi.Location = new System.Drawing.Point(356, 175);
-            this.btnChiudi.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnChiudi.Location = new System.Drawing.Point(249, 105);
             this.btnChiudi.Name = "btnChiudi";
-            this.btnChiudi.Size = new System.Drawing.Size(117, 63);
+            this.btnChiudi.Size = new System.Drawing.Size(82, 38);
             this.btnChiudi.TabIndex = 3;
             this.btnChiudi.Text = "Chiudi";
             this.btnChiudi.UseVisualStyleBackColor = false;
@@ -85,9 +82,10 @@
             // 
             this.Reset.BackColor = System.Drawing.Color.MistyRose;
             this.Reset.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Reset.Location = new System.Drawing.Point(12, 175);
+            this.Reset.Location = new System.Drawing.Point(8, 105);
+            this.Reset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Reset.Name = "Reset";
-            this.Reset.Size = new System.Drawing.Size(117, 63);
+            this.Reset.Size = new System.Drawing.Size(82, 38);
             this.Reset.TabIndex = 4;
             this.Reset.Text = "Reset";
             this.Reset.UseVisualStyleBackColor = false;
@@ -95,17 +93,16 @@
             // 
             // StatusForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(489, 258);
+            this.ClientSize = new System.Drawing.Size(342, 155);
             this.Controls.Add(this.Reset);
             this.Controls.Add(this.btnChiudi);
             this.Controls.Add(this.tBoxUltimoScambio);
             this.Controls.Add(this.txtUltimaModifica);
             this.Controls.Add(this.btnTermina);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.Name = "StatusForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
