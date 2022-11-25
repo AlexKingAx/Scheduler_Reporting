@@ -16,6 +16,8 @@ namespace Scheduler_Reporting.Models
         public string invoice_number { get; set; }
         public string document_type { get; set; }
         public string description { get; set; } = "";
+
+        public bool fromDrVeto { get; set; } = true;
         public string notes { get; set; } = "";
         public int ritenuta { get; set; }
         public string? status { get; set; } = null;

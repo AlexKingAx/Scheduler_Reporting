@@ -9,6 +9,7 @@ namespace Scheduler_Reporting.Models
     public class Login
     {
         public string connStringDrVeto;
+        public string OnlyInThisData;
         public string? token { get; set; }
         public string? server_name { get; set; } = "(localDb)\\MSSQLLocalDB";
         public string? db_name { get; set; } = "";
@@ -18,6 +19,10 @@ namespace Scheduler_Reporting.Models
         // Used for login with windows user credential
         public bool trusted_connection { get; set; } = true;
         public DateTime? last_sync { get; set; }
+
+        // Used for change date of data transfer 
+        public DateTime start_data_trans { get; set; } = new DateTime();
+        public DateTime end_data_trans { get; set; } = new DateTime();
         public void SetDrvetoString()
         {
             // For connection with windows credential use trusted connection
@@ -26,6 +31,12 @@ namespace Scheduler_Reporting.Models
             // Without
             else this.connStringDrVeto = "Data Source=" + this.server_name + "; Initial Catalog=" + this.db_name + "; User Id="+ this.user_id+"; Password="+ this.password+";";
 
+
+        }
+        public void SetOnlyInThisDataString()
+        {
+            if (this.start_data_trans.Year.ToString().ToString() == "1") this.OnlyInThisData = "";
+            else this.OnlyInThisData = " and FCdate >= '" + this.start_data_trans.ToString("yyyy/MM/dd") + "' and FCdate <= '" + this.end_data_trans.ToString("yyyy/MM/dd") + "'";
 
         }
     }

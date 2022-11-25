@@ -52,6 +52,7 @@ namespace Scheduler_Reporting
                 userJson = File.ReadAllText(@"user.json");
                 local_user = JsonConvert.DeserializeObject<Login>(userJson);
                 local_user.SetDrvetoString();
+                local_user.SetOnlyInThisDataString();
                 if (local_user.token != null || local_user.token != "") success = true;
 
             }
@@ -148,6 +149,7 @@ namespace Scheduler_Reporting
             if (success)
             {
                 local_user.SetDrvetoString();
+                local_user.SetOnlyInThisDataString();
 
                 success = await ConnectionTester(success);// TESTO LE CONN
 
@@ -184,7 +186,7 @@ namespace Scheduler_Reporting
             //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
             SqlConnection connDrVeto = new SqlConnection(local_user.connStringDrVeto);
             connDrVeto.Open();
-            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', FCnumero as 'Numero Fattura', FCtyp as 'Tipologia Documento', FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmtENPAV as 'Enpav', FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FCnom as 'Nome Cliente', FCprenom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid inner join ACTES on AC_Uid = FL_ACT_Uid inner join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where FCtyp = 'Facture'";
+            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', CASE when FCtyp = 'Avoir' then FCnumero + '/Nota' else FCnumero end as 'Numero Fattura', FCtyp as 'Tipologia Documento',FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,FAlib as 'Famiglia drv',FLqte as 'QTA', FLtht as 'Price', FLmtENPAV as 'Enpav',FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3',FCttc - FCmtr as 'Residuo',FCprenom as 'Nome Cliente', FCnom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid left join ACTES on AC_Uid = FL_ACT_Uid left join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where  (FCtyp = 'Facture' or FCtyp = 'Avoir') and FLtht is not NULL" + local_user.OnlyInThisData + " order by 'Numero Fattura';";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
             SqlDataReader reader = sqlcmd.ExecuteReader();
 
@@ -371,6 +373,7 @@ namespace Scheduler_Reporting
             while (reader.Read())
             {
                 var statusVar = reader.GetBoolean("Status"); // PRENDO IL VALORE CHE CE ALL'INTERNO DELLA RESPONDE DI STATUS
+                var DrVeto_dueamount = reader.GetDecimal("Residuo"); // PRENDO IL VALORE CHE CE ALL'INTERNO DELLA RESPONDE DI STATUS
 
                 // CLASSE PRINCIPALE PER RACCOLTA DATI
                 var data = new Data();
@@ -382,6 +385,15 @@ namespace Scheduler_Reporting
                     statusString = "COMPLETED"; // ASSEGNO IL VALORE COMPLETED SE NELLA RESPONSE TROVO TRUE O 1
                     data.due_amount = 0;
                 }
+                else if(DrVeto_dueamount > 0) // SE E 0, VERIFICO SE E PARZIALMENTE PAGATA O NON PAGATA
+                {
+                    statusString = "SENT";
+                    data.due_amount = (int)DrVeto_dueamount * 100;
+
+                }
+
+                data.due_amount = (int)DrVeto_dueamount * 100;
+
 
                 // TOLGO LA VIRGOLA ALLA RITENUTA, SICCOME LO VUOLE COME INTERO
                 var ritenutaVar = reader.GetDecimal("Ritenuta Acconto");
@@ -456,7 +468,7 @@ namespace Scheduler_Reporting
                 {
                     var d_type = reader.GetString("Tipologia Documento");
                     if(d_type == "Facture") data.document_type = "TD01";
-
+                    else if (d_type == "Avoir") data.document_type = "TD04";
                 }
                 catch (Exception er)
                 {
@@ -719,8 +731,6 @@ namespace Scheduler_Reporting
         {
             foreach (var obj in listFromDrVeto)
             {
-
-
                 // SE NON MI TROVA UN ELEMENTO NELLA LISTA CON IL NUMERO FATTURA UGUALE A QUELLO
                 // DELL ALTRA LISTA ALLORA LO AGGIUNGE PER IL TRASFERIMENTO
                 if (!listForReporting.Any(n => n.invoice_number == obj.invoice_number))
@@ -738,10 +748,10 @@ namespace Scheduler_Reporting
 
                         // PASSO LE RIGHE FATTURE NEL CASO CI SIA UN DOPPIONE ALL'INTERNO
                         // DELLA LISTA FROM DR VETO. 
-                        // DOPO DI CHE LO AGGIUNGO ALL'ELEMNTO CHE SARA MESSO NELLA LISTA FOR REPORTING. 
+                        // DOPO DI CHE LO AGGIUNGO ALL'ELEMENTO CHE SARA MESSO NELLA LISTA FOR REPORTING. 
                         element.items.AddRange(obj.items);
 
-                        listForReporting.Add(element);// LO REINSERISCO AGGIORNATO                   
+                        listForReporting.Add(element);// LO REINSERISCO AGGIORNATO
                     }
                 }
             }
