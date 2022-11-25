@@ -32,6 +32,8 @@ namespace Scheduler_Reporting
         private void StatusForm_Load(object sender, EventArgs e)
         {
             tBoxUltimoScambio.Text = local_user.last_sync.ToString();
+
+            //Setting current year selection in json file if == 1 it take ALL years
             tBoxYear.Text = local_user.start_data_trans.Year.ToString() == "1" ? "ALL" : local_user.start_data_trans.Year.ToString();
         }
 
@@ -54,20 +56,25 @@ namespace Scheduler_Reporting
             {
                 if (tBoxYear.Text != "ALL" && Int32.TryParse(tBoxYear.Text, out int year))
                 {
-                    // 
+                    // if find a year set selected year to proprerties
                     local_user.start_data_trans = new DateTime(year, 1, 1);
                     local_user.end_data_trans = new DateTime(year, 12, 31);
+
+                    //  and then to query
                     local_user.SetOnlyInThisDataString();
                 }
                 else if (tBoxYear.Text == "ALL")
                 {
-                    // If ALL create empty DateTime
+                    // If == ALL create empty DateTime to take all invoice
                     local_user.start_data_trans = new DateTime();
                     local_user.end_data_trans = new DateTime();
+                    
+                    // then set string part to "" for search all invoices
                     local_user.SetOnlyInThisDataString();
                 }
                 else
                 {
+                    // IF no previus case excecuted message
                     MessageBox.Show("L'anno inserito non è corretto! Attenzione inserire solo l'anno, oppure ALL per tutto selezionare tutte le fatture presenti su DrVeto", "Data change message", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     return;
                 }
@@ -79,6 +86,7 @@ namespace Scheduler_Reporting
                 userJson = JsonConvert.SerializeObject(local_user);
                 File.WriteAllText(@"user.json", userJson);
 
+                //Restart the application to re-create new query xD
                 Application.Restart(); 
                 Environment.Exit(0);
             }
