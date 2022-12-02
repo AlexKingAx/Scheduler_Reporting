@@ -85,6 +85,7 @@
             // 
             this.Reset.BackColor = System.Drawing.Color.MistyRose;
             this.Reset.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+
             this.Reset.Location = new System.Drawing.Point(11, 205);
             this.Reset.Margin = new System.Windows.Forms.Padding(2);
             this.Reset.Name = "Reset";
@@ -129,10 +130,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+
             this.ClientSize = new System.Drawing.Size(493, 254);
             this.Controls.Add(this.tBoxYear);
             this.Controls.Add(this.txtYear);
             this.Controls.Add(this.btnDataChange);
+
             this.Controls.Add(this.Reset);
             this.Controls.Add(this.btnChiudi);
             this.Controls.Add(this.tBoxUltimoScambio);
