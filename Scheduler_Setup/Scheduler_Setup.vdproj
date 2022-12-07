@@ -33,7 +33,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9C801826B9DC427AAD487BD8C7CB143F"
+        "MsmKey" = "8:_BAEBD1F8B4E8437299893C5C3DBA5A92"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -408,7 +408,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2704C465E4F8498386C79921F35B8796"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_405F15F101A74E0E8AA32721A95838E6"
             {
             "Name" = "8:Scheduler Reporting"
             "Arguments" = "8:"
@@ -416,13 +416,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_9C801826B9DC427AAD487BD8C7CB143F"
+            "Target" = "8:_BAEBD1F8B4E8437299893C5C3DBA5A92"
             "Folder" = "8:_F38913C28E5349DA8CA958283913A178"
             "WorkingFolder" = "8:_FA32BB4F402D4E2D829F8A710803D4AA"
             "Icon" = "8:_40BD192794BF4F8E9DCBB4DA52928379"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E3634766CC4247E18BE246D652B7A02F"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5EFAA2A86A8F406092EA3757246498C3"
             {
             "Name" = "8:Scheduler Reporting"
             "Arguments" = "8:"
@@ -430,7 +430,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_9C801826B9DC427AAD487BD8C7CB143F"
+            "Target" = "8:_BAEBD1F8B4E8437299893C5C3DBA5A92"
             "Folder" = "8:_6068E1FB21B342B9BBD545EBAED985E2"
             "WorkingFolder" = "8:_FA32BB4F402D4E2D829F8A710803D4AA"
             "Icon" = "8:_40BD192794BF4F8E9DCBB4DA52928379"
@@ -835,7 +835,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9C801826B9DC427AAD487BD8C7CB143F"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BAEBD1F8B4E8437299893C5C3DBA5A92"
             {
             "SourcePath" = "8:..\\Scheduler_Reporting\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
