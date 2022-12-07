@@ -22,6 +22,7 @@ namespace Scheduler_Reporting.Models
         public bool indtax { get; set; } = false;
         public int? enpav { get; set; }
         public bool? valid { get; set; } = true;
+        public string? tax_motivation { get; set; } = null;
 
 
     }

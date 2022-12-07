@@ -186,7 +186,7 @@ namespace Scheduler_Reporting
             //APRO LA CONNESSIONE E GLI MANDO LA QUERY SQL
             SqlConnection connDrVeto = new SqlConnection(local_user.connStringDrVeto);
             connDrVeto.Open();
-            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', CASE when FCtyp = 'Avoir' then FCnumero + '/Nota' else FCnumero end as 'Numero Fattura', FCtyp as 'Tipologia Documento',FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,CASE when FAlib is null then 'Vuota' else FAlib end as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmtENPAV as 'Enpav',FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3',FCttc - FCmtr as 'Residuo',FCprenom as 'Nome Cliente', FCnom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid left join ACTES on AC_Uid = FL_ACT_Uid left join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where  (FCtyp = 'Facture' or FCtyp = 'Avoir') and FLtht is not NULL" + local_user.OnlyInThisData + " order by 'Numero Fattura';";
+            query = "select FCdate as 'Data Fattura', FCdmaj as 'Data Aggiornamento', CASE when FCtyp = 'Avoir' then FCnumero + '/Nota' else FCnumero end as 'Numero Fattura', FCtyp as 'Tipologia Documento',FCnumero + ' - ' + CONVERT(VARCHAR, FCdate) as 'Descrizione', FCtauxRA as 'Ritenuta Acconto', FCsold as'Status', FLlib as 'Descrizione Riga' ,CASE when FAlib is null then 'Vuota' else FAlib end as 'Famiglia drv', FLqte as 'QTA', FLtht as 'Price', FLmtENPAV as 'Enpav',FLmttva as 'Tot IVA', FCtx1 as 'Perc IVA 1', FCtva1 as 'IVA 1', FCtx2 as 'Perc IVA 2', FCtva2 as 'IVA 2', FCtx3 as 'Perc IVA 3', FCtva3 as 'IVA 3', FLtvanature as 'Natura IVA', FCttc - FCmtr as 'Residuo',FCprenom as 'Nome Cliente', FCnom as 'Cognome', CLtelpor1 as 'Telefono', CLmail1 as 'Email', FCad1 as 'Indirizzo', FCad2 as 'Indirizzo 2', CLvil as 'Citta', PAYS_Nom as 'Nazione', CLcodeFiscal as 'CF Cliente', CLnumtva as 'P iva', CLdept as 'Provincia','Billing' as 'TipologiaIndiirizzo', CLnumtva as 'P.IVA', CLcp as 'CAP', Cabcode as 'Codice Struttura' from FACENT inner join FACLIG on FC_Uid = FL_FAC_Uid inner join CLIENTS on FCcli = CL_Uid left join ACTES on AC_Uid = FL_ACT_Uid left join FAMACTE on ACfam_uid = FA_Uid inner join PAYS on CLpays_uid = PAYS_Uid inner join CABINET on FCsite = Cab_Id where  (FCtyp = 'Facture' or FCtyp = 'Avoir') and FLtht is not NULL" + local_user.OnlyInThisData + " order by 'Numero Fattura';";
             SqlCommand sqlcmd = new SqlCommand(query, connDrVeto);
             SqlDataReader reader = sqlcmd.ExecuteReader();
 
@@ -311,7 +311,7 @@ namespace Scheduler_Reporting
         /// <returns></returns>
         private async Task GetStructureTable()
         {
-            string url = "https://reporting.alcyonsoluzionidigitali.it/api/v1/structures";
+            string url = "http://reporting.alcyonsoluzionidigitali.it/api/v1/structures";
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept
@@ -322,7 +322,7 @@ namespace Scheduler_Reporting
 
                 client.DefaultRequestHeaders.ConnectionClose = true;
 
-                System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var response = await client.GetAsync(url);
 
                 string responseBody = response.Content.ReadAsStringAsync().Result;
@@ -336,7 +336,7 @@ namespace Scheduler_Reporting
         /// <returns></returns>
         private async Task DataSender()
         {
-            var url = "https://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/import";
+            var url = "http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/import";
             string json;
             foreach (var item in listForReporting)
             {
@@ -354,7 +354,7 @@ namespace Scheduler_Reporting
 
                     client.DefaultRequestHeaders.ConnectionClose = true;
 
-                    System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                    //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                     var response = await client.PostAsync(url, data);
 
                     string responseBody = response.Content.ReadAsStringAsync().Result;
@@ -624,6 +624,96 @@ namespace Scheduler_Reporting
                 {
 
                 }
+                try
+                {
+                    //GESTISCO NATURA IVA SECONDO REPORTING
+                    switch (reader.GetByte("Natura IVA"))
+                    {
+                        case 35:
+                            item.tax_motivation = "N1";
+                            break;
+                        case 36:
+                            item.tax_motivation = "N2.1";
+                            break;
+                        case 37:
+                            item.tax_motivation = "N2.2";
+                            break;
+                        case 38:
+                            item.tax_motivation = "N2.2";
+                            break;
+                        case 39:
+                            item.tax_motivation = "N2.2";
+                            break;
+                        case 40:
+                            item.tax_motivation = "N3.1";
+                            break;
+                        case 41:
+                            item.tax_motivation = "N3.2";
+                            break;
+                        case 42:
+                            item.tax_motivation = "N3.3";
+                            break;
+                        case 43:
+                            item.tax_motivation = "N3.4";
+                            break;
+                        case 44:
+                            item.tax_motivation = "N3.4";
+                            break;
+                        case 45:
+                            item.tax_motivation = "N3.4";
+                            break;
+                        case 46:
+                            item.tax_motivation = "N3.5";
+                            break;
+                        case 47:
+                            item.tax_motivation = "N3.6";
+                            break;
+                        case 48:
+                            item.tax_motivation = "N4";
+                            break;
+                        case 49:
+                            item.tax_motivation = "N5";
+                            break;
+                        case 50:
+                            item.tax_motivation = "N6.1";
+                            break;
+                        case 51:
+                            item.tax_motivation = "N6.2";
+                            break;
+                        case 52:
+                            item.tax_motivation = "N6.3";
+                            break;
+                        case 53:
+                            item.tax_motivation = "N6.4";
+                            break;
+                        case 54:
+                            item.tax_motivation = "N6.5";
+                            break;
+                        case 55:
+                            item.tax_motivation = "N6.6";
+                            break;
+                        case 56:
+                            item.tax_motivation = "N6.7";
+                            break;
+                        case 57:
+                            item.tax_motivation = "N6.8";
+                            break;
+                        case 58:
+                            item.tax_motivation = "N6.9";
+                            break;
+                        case 59:
+                            item.tax_motivation = "N7";
+                            break;
+                        default:
+                            item.tax_motivation = null;
+                            break;
+                    }
+
+                }
+                catch (Exception er)
+                {
+
+                }
 
                 //AGGIUNGO RIGA ALLA FATTURA
                 data.items.Add(item);
@@ -836,8 +926,8 @@ namespace Scheduler_Reporting
 
                 //var content = new FormUrlEncodedContent(values);
                 //HttpResponseMessage response = new HttpResponseMessage();
-                System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                var response = await client.GetAsync("https://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
+                //System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                var response = await client.GetAsync("http://reporting.alcyonsoluzionidigitali.it/api/v1/invoices/passive");
                 //response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 //MessageBox.Show(responseBody);
