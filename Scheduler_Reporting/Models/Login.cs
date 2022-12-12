@@ -36,7 +36,7 @@ namespace Scheduler_Reporting.Models
         public void SetOnlyInThisDataString()
         {
             if (this.start_data_trans.Year.ToString().ToString() == "1") this.OnlyInThisData = "";
-            else this.OnlyInThisData = " and FCdate >= '" + this.start_data_trans.ToString("yyyy/MM/dd") + "' and FCdate <= '" + this.end_data_trans.ToString("yyyy/MM/dd") + "'";
+            else this.OnlyInThisData = " and FCdcrea >= '" + this.start_data_trans.ToString("yyyy/MM/dd") + "' and FCdcrea <= '" + this.end_data_trans.ToString("yyyy/MM/dd") + "'";
 
         }
     }
