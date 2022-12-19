@@ -27,12 +27,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7BB85BAE624248B0B5C065DC2FB194F2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7CCD2669FA3D4A62913BF8F0B7D29E09"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -40,6 +34,12 @@
         "Entry"
         {
         "MsmKey" = "8:_C640197370724571A585C7C204DC596E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE3C93B17CC24C2B9FBA8877BD134154"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -288,7 +288,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Scheduler Setup"
         "ProductCode" = "8:{A68D26A0-A286-4679-B658-3B540B856BD7}"
-        "PackageCode" = "8:{0C9CD40B-9D27-413C-AB28-CB35A3D10061}"
+        "PackageCode" = "8:{A2D52C39-F3C6-4873-A7BD-9DF10EBD7DD9}"
         "UpgradeCode" = "8:{EBF3F0DA-733E-435D-846E-F71B97AC0148}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -408,7 +408,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A48233F599B946CCA251EDB7F569A371"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8B6CF738232A4664BC2F9779365A2CBE"
             {
             "Name" = "8:Scheduler Reporting"
             "Arguments" = "8:"
@@ -416,13 +416,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_7BB85BAE624248B0B5C065DC2FB194F2"
-            "Folder" = "8:_6068E1FB21B342B9BBD545EBAED985E2"
+            "Target" = "8:_EE3C93B17CC24C2B9FBA8877BD134154"
+            "Folder" = "8:_F38913C28E5349DA8CA958283913A178"
             "WorkingFolder" = "8:_FA32BB4F402D4E2D829F8A710803D4AA"
             "Icon" = "8:_40BD192794BF4F8E9DCBB4DA52928379"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CAA678B6195D407EBEEE88C09E93D78D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E1D715BD72A449C0897BD0DDC79C965C"
             {
             "Name" = "8:Scheduler Reporting"
             "Arguments" = "8:"
@@ -430,8 +430,8 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_7BB85BAE624248B0B5C065DC2FB194F2"
-            "Folder" = "8:_F38913C28E5349DA8CA958283913A178"
+            "Target" = "8:_EE3C93B17CC24C2B9FBA8877BD134154"
+            "Folder" = "8:_6068E1FB21B342B9BBD545EBAED985E2"
             "WorkingFolder" = "8:_FA32BB4F402D4E2D829F8A710803D4AA"
             "Icon" = "8:_40BD192794BF4F8E9DCBB4DA52928379"
             "Feature" = "8:"
@@ -835,7 +835,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7BB85BAE624248B0B5C065DC2FB194F2"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_EE3C93B17CC24C2B9FBA8877BD134154"
             {
             "SourcePath" = "8:..\\Scheduler_Reporting\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
